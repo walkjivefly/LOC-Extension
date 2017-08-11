@@ -1,11 +1,11 @@
 LibreOffice Calc crypto price lookup extension
 ===
-The LOC extension allows you to create customized spreadsheets with crypto currency market data directly from the web. Currently supported online sources include [Poloniex](http://poloniex.com).
+The LOC extension allows you to create customized spreadsheets with crypto currency market data directly from the web. The initial version supports only one source - [Poloniex](http://poloniex.com) - but others are planned.
 
 ### Download   
-You can download the current version of the LOC Extension here [![][shield:release-latest]][GIT:release]
+You will soon be able to download the current version of the LOC Extension here [![][shield:release-latest]][GIT:release]
 
-The LOC extension can also be found on the [LibreOffice Extension Center](http://extensions.libreoffice.org/extension-center/loc-extension).
+Hopefully the LOC extension will also be available on the [LibreOffice Extension Center](http://extensions.libreoffice.org/extension-center/loc-extension).
 
 **NOTE**: The extension itself is LOC.oxt.  The example .ods worksheets demonstrate how to use the extension.
 
@@ -16,11 +16,15 @@ The LOC Extension adds a new function to Calc:
 GETPOLONIEX(Ticker,Datacode) 
 ```  
 
-Quotes **must** be used when entering the ticker directly ex: ```GETPOLONIEX("BTC-ETH",1)```, but are **not** needed when referencing another cell ex: ```GETPOLONIEX(A1,1)```.
+Quotes **must** be used when entering the ticker directly ex: ```GETPOLONIEX("BTC-ETH","last")```, but are **not** needed when referencing another cell ex: ```GETPOLONIEX(A1,A2)```.
 
 In the latter case the data in A1 should be ```BTC-ETH```, not ```"BTC-ETH"```.
 
 **NOTE**: The full set of datacodes are demonstrated in the example .ods worksheets included with the release.
+
+###Dependencies
+
+The LOC Extension relies on the Poloniex python API client for humans which is available through PyPI or direct from [GitHub](https://github.com/Aula13/poloniex). Installing this in the LibreOffice embedded python is non-trivial. 
 
 ###Support
 

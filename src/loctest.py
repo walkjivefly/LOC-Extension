@@ -49,7 +49,8 @@ def main(argv):
     print ("Datacode used is", arg_datacode)
     if arg_funct == "poloniex":
         poloniex_test(main_loc, arg_ticker, arg_datacode)
-    else usage()
+    else:
+        usage()
     sys.exit(2)
 
 
