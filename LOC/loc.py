@@ -10,24 +10,8 @@
 #  version 3 of the License, or (at your option) any later version.
 #
 
-import os
-import sys
-import inspect
-#Try/except is for LibreOffice Python3.x vs. OpenOffice Python2.x.
-try:
-    from urllib.request import Request, urlopen
-    from urllib.error import URLError
-except ImportError:
-    from urllib2 import Request, urlopen, URLError
-from codecs import iterdecode
 import unohelper
 from com.loc.crypto.getinfo import XLoc
-# Add current directory to path to import poloniex module
-cmd_folder = os.path.realpath(os.path.abspath
-                              (os.path.split(inspect.getfile
-                                             ( inspect.currentframe() ))[0]))
-if cmd_folder not in sys.path:
-    sys.path.insert(0, cmd_folder)
 from poloniex import Poloniex
 
 class LocImpl(unohelper.Base, XLoc ):
