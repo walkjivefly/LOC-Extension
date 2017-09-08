@@ -65,7 +65,7 @@ def usage(err):
     print ('Available function is poloniex')
     print ("ticker is the crypto currency you want data for")
     print ("datacode is the data you require, one of: quoteVolume, " \
-           " lowestAsk, perentChange, last, low24hr, high24hr, " \
+           " lowestAsk, percentChange, last, low24hr, high24hr, " \
            " baseVolume, id, isFrozen")
     if err == 2:
         sys.exit(2)
