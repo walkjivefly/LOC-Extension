@@ -22,11 +22,11 @@ In the latter case the data in A1 should be ```BTC-ETH```, not ```"BTC-ETH"```.
 
 **NOTE**: The full set of datacodes are demonstrated in the example .ods worksheets included with the release.
 
-###Dependencies
+### Dependencies
 
 The LOC Extension relies on the Poloniex python API client for humans which is available through PyPI or direct from [GitHub](https://github.com/Aula13/poloniex). Installing this in the LibreOffice embedded python is non-trivial. 
 
-###Support
+### Support
 
 For general support please visit the [forums](http://forum.openoffice.org/en/forum/index.php). If you find a bug or wish to request a feature please file an issue at the [issue tracker](http://github.com/walkjivefly/LOC-Extension/issues).
 
