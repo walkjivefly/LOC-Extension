@@ -1,0 +1,10 @@
+/setpath
+/LOC.oxt
+/LOC/description-en-US.txt
+/LOC/description.xml
+/LOC/loc.py
+/LOC/LOC.xcu
+/LOC/XLoc.rdb
+/LOC/META-INF
+/LOC/META-INF/manifest.xml
+/src/__pycache__/loc.cpython-35.pyc
