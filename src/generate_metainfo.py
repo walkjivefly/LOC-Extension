@@ -17,7 +17,7 @@ cur_dir = os.getcwd()
 
 # A unique ID for the extension.
 addin_id = "com.loc.crypto.getinfo"
-addin_version = "0.0.1"
+addin_version = "0.1.0"
 addin_displayname = "Crypto Currency Market Function Extension."
 addin_publisher_link = "https://github.com/walkjivefly/LOC-Extension"
 addin_publisher_name = "Mark Brooker"

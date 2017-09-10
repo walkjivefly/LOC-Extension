@@ -10,13 +10,7 @@ Some ideas for improvements/things todo:
 2. Switch to using ccxt (https://github.com/kroitor/ccxt.git). This much 
    more comprehensive wrapper talks to 77+ exchanges.
 
-3. Package whichever API wrapper is used with the extension to make 
-   installation easier. Currently it's a mess! But then "we" have to 
-   maintain the wrapper too.
-
-4. After #3, submit extension to https://extensions.libreoffice.org/extensions
-
-5. 
+3. 
 
 
 

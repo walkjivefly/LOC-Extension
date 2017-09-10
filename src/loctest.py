@@ -50,8 +50,7 @@ def main(argv):
     if arg_funct == "poloniex":
         poloniex_test(main_loc, arg_ticker, arg_datacode)
     else:
-        usage()
-    sys.exit(2)
+        usage(0)
 
 
 def poloniex_test(loc_py, ticker, datacode):
@@ -67,10 +66,7 @@ def usage(err):
     print ("datacode is the data you require, one of: quoteVolume, " \
            " lowestAsk, percentChange, last, low24hr, high24hr, " \
            " baseVolume, id, isFrozen")
-    if err == 2:
-        sys.exit(2)
-    else:
-        sys.exit()
+    sys.exit(err)
         
 if __name__ == "__main__":
     main(sys.argv[1:])

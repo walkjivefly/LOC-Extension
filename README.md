@@ -1,13 +1,13 @@
 LibreOffice Calc crypto price lookup extension
 ===
-The LOC extension allows you to create customized spreadsheets with crypto currency market data directly from the web. The initial version supports only one source - [Poloniex](http://poloniex.com) - but others are planned.
+The LOC extension allows you to create customized spreadsheets with crypto currency market data directly from the web. The initial version supports only one source - [Poloniex](https://poloniex.com) - but others are planned.
 
 ### Download   
 You will soon be able to download the current version of the LOC Extension here [![][shield:release-latest]][GIT:release]
 
 Hopefully the LOC extension will also be available on the [LibreOffice Extension Center](http://extensions.libreoffice.org/extension-center/loc-extension).
 
-**NOTE**: The extension itself is LOC.oxt.  The example .ods worksheets demonstrate how to use the extension.
+**NOTE**: The extension itself is LOC.oxt.  The example .ods worksheet demonstrates how to use the extension.
 
 ### Usage
 
@@ -16,15 +16,15 @@ The LOC Extension adds a new function to Calc:
 GETPOLONIEX(Ticker,Datacode) 
 ```  
 
-Quotes **must** be used when entering the ticker directly ex: ```GETPOLONIEX("BTC-ETH","last")```, but are **not** needed when referencing another cell ex: ```GETPOLONIEX(A1,A2)```.
+Quotes **must** be used when entering the ticker directly ex: ```GETPOLONIEX("BTC_ETH","last")```, but are **not** needed when referencing another cell ex: ```GETPOLONIEX(A1,A2)```.
 
-In the latter case the data in A1 should be ```BTC-ETH```, not ```"BTC-ETH"```.
+In the latter case the data in A1 should be ```BTC_ETH```, not ```"BTC_ETH"```.
 
 **NOTE**: The full set of datacodes are demonstrated in the example .ods worksheets included with the release.
 
 ### Dependencies
 
-The LOC Extension relies on the Poloniex python API client for humans which is available through PyPI or direct from [GitHub](https://github.com/Aula13/poloniex). Installing this in the LibreOffice embedded python is non-trivial. 
+Version 0.1.0 is fully standalone. The 3rd-party Poloniex API wrapper requirement has been removed. 
 
 ### Support
 
