@@ -3,9 +3,9 @@ LibreOffice Calc crypto price lookup extension
 The LOC extension allows you to create customized spreadsheets with crypto currency market data directly from the web. The initial version supports only one source - [Poloniex](https://poloniex.com) - but others are planned.
 
 ### Download   
-You will soon be able to download the current version of the LOC Extension here [![][shield:release-latest]][GIT:release]
+You can download the current version of the LOC Extension here [![][shield:release-latest]][GIT:release]
 
-Hopefully the LOC extension will also be available on the [LibreOffice Extension Center](https://extensions.libreoffice.org/extensions/loc-extension-for-libreoffice-calc).
+The LOC extension has been submitted for approval at the [LibreOffice Extension Center](https://extensions.libreoffice.org/extensions/loc-extension-for-libreoffice-calc).
 
 **NOTE**: The extension itself is LOC.oxt.  The example .ods worksheet demonstrates how to use the extension.
 
