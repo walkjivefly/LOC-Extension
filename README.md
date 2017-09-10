@@ -5,7 +5,7 @@ The LOC extension allows you to create customized spreadsheets with crypto curre
 ### Download   
 You will soon be able to download the current version of the LOC Extension here [![][shield:release-latest]][GIT:release]
 
-Hopefully the LOC extension will also be available on the [LibreOffice Extension Center](http://extensions.libreoffice.org/extension-center/loc-extension).
+Hopefully the LOC extension will also be available on the [LibreOffice Extension Center](https://extensions.libreoffice.org/extensions/loc-extension-for-libreoffice-calc).
 
 **NOTE**: The extension itself is LOC.oxt.  The example .ods worksheet demonstrates how to use the extension.
 
