@@ -6,6 +6,10 @@ module com { module loc { module crypto { module getinfo {
     {
       // Modeled as an 'any' to allow it to be NULL/None/Missing.
       any getPoloniex( [in] string a, [in] any b );
+      // No parms, just get the whole market
+      any getMarket( );
+      // Expecting parms to be exchange and function.
+      any passccxt( [in] string a, [in] any b, [in] any c );
     };
 
 }; }; }; };

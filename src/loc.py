@@ -47,7 +47,7 @@ class Poloniex():
         return self.api_query("returnMarketTradeHistory", {'currencyPair': currencyPair})
 
 
-class LocImpl(unohelper.Base, XLoc):
+class Loc2Impl(unohelper.Base, XLoc):
     """Define the main class for the LOC extension """    
     def __init__( self, ctx ):
         self.ctx = ctx
@@ -61,11 +61,28 @@ class LocImpl(unohelper.Base, XLoc):
             result = 'Something bad happened'
         return result
 
-    
+    def getMarket( self ):
+        """Return whole market snapshot. For starters return the whole lot as one string. Later we will programmatically chop it up and insert it into a new sheet as a side effect."""
+        try:
+            polo = Poloniex()
+            result = polo.returnTicker()
+        except:
+            result = "Couldn't load market data"
+        return result
+
+    def passccxt( self, parm1, parm2, parm3 ):
+        """Placeholder function as interface to ccxt"""
+        try:
+            result = "Let's pretend the ccxt call worked!"
+        except:
+            result = "Something bad happened in the call to ccxt"
+        return result
+
+
 def createInstance( ctx ):
-    return LocImpl( ctx )
+    return Loc2Impl( ctx )
 
 g_ImplementationHelper = unohelper.ImplementationHelper()
 g_ImplementationHelper.addImplementation( \
-    createInstance,"com.loc.crypto.getinfo.python.LocImpl",
+    createInstance,"com.loc.crypto.getinfo.python.Loc2Impl",
         ("com.sun.star.sheet.AddIn",),)

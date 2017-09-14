@@ -26,7 +26,7 @@ if cmd_folder not in sys.path:
 import loc
 
 def main(argv):
-    main_loc = loc.LocImpl(argv)
+    main_loc = loc.Loc2Impl(argv)
     arg_funct = ''
     arg_ticker = ''
     arg_datacode = ''
@@ -49,6 +49,10 @@ def main(argv):
     print ("Datacode used is", arg_datacode)
     if arg_funct == "poloniex":
         poloniex_test(main_loc, arg_ticker, arg_datacode)
+    elif arg_funct == "market":
+        poloniex_test2(main_loc)
+    elif arg_funct == "ccxt":
+        poloniex_test3(main_loc, arg_ticker, arg_datacode, "dummy")
     else:
         usage(0)
 
@@ -58,13 +62,23 @@ def poloniex_test(loc_py, ticker, datacode):
     print (result)
     sys.exit()
     
+def poloniex_test2(loc_py):
+    result = loc_py.getMarket()
+    print (result)
+    sys.exit()
+    
+def poloniex_test3(loc_py, exchange, function, ticker):
+    result = loc_py.passccxt(exchange, function, ticker)
+    print (result)
+    sys.exit()
+    
         
 def usage(err):
     print ("Usage: loctest.py -f <function> -t <ticker> -d <datacode>")
-    print ('Available function is poloniex')
-    print ("ticker is the crypto currency you want data for")
-    print ("datacode is the data you require, one of: quoteVolume, " \
-           " lowestAsk, percentChange, last, low24hr, high24hr, " \
+    print ("Available functions are poloniex|market|passccxt")
+    print ("When the function is poloniex, ticker is the crypto currency")
+    print ("you want data for, datacode is the data you require, one of:")
+    print ("quoteVolume, lowestAsk, percentChange, last, low24hr, high24hr, " \
            " baseVolume, id, isFrozen")
     sys.exit(err)
         
