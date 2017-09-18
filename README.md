@@ -5,7 +5,7 @@ The LOC extension allows you to create customized spreadsheets with crypto curre
 ### Download   
 You can download the current version of the LOC Extension here [0.1.0](https://github.com/walkjivefly/LOC-Extension/releases/tag/v0.1.0)
 
-The LOC extension has been submitted for approval at the [LibreOffice Extension Center](https://extensions.libreoffice.org/extensions/loc-extension-for-libreoffice-calc).
+The LOC extension is also available at the [LibreOffice Extension Center](https://extensions.libreoffice.org/extensions/loc-extension-for-libreoffice-calc).
 
 **NOTE**: The extension itself is LOC.oxt.  The example .ods worksheet demonstrates how to use the extension.
 
@@ -20,7 +20,7 @@ Quotes **must** be used when entering the ticker directly ex: ```GETPOLONIEX("BT
 
 In the latter case the data in A1 should be ```BTC_ETH```, not ```"BTC_ETH"```.
 
-**NOTE**: The full set of datacodes are demonstrated in the example .ods worksheets included with the release.
+**NOTE**: The full set of datacodes are demonstrated in the example .ods worksheet included with the release. The worksheet also contains a full list of the available symbols/currency-pairs.
 
 ### Dependencies
 
