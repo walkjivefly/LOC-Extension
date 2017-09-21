@@ -1,15 +1,15 @@
 #include </com/sun/star/uno/XInterface.idl>
 
-module com { module loc { module crypto { module getinfo {
+module com { module loc { module crypto { module getinfo2 {
 
-    interface XLoc
+    interface XLoc2
     {
       // Modeled as an 'any' to allow it to be NULL/None/Missing.
-      any getPoloniex( [in] string a, [in] any b );
+      any cf1( [in] string a, [in] any b );
       // No parms, just get the whole market
-      any getMarket( );
+      any cf2( );
       // Expecting parms to be exchange and function.
-      any passccxt( [in] string a, [in] any b, [in] any c );
+      any cf3( [in] string a, [in] any b, [in] any c );
     };
 
 }; }; }; };

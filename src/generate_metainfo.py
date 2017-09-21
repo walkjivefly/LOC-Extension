@@ -16,9 +16,9 @@ import os
 cur_dir = os.getcwd()
 
 # A unique ID for the extension.
-addin_id = "com.loc.crypto.getinfo"
+addin_id = "com.loc.crypto.getinfo2"
 addin_version = "0.2.0"
-addin_displayname = "Crypto Currency Market Function Extension."
+addin_displayname = "Crypto Currency Market Function2 Extension."
 addin_publisher_link = "https://github.com/walkjivefly/LOC-Extension"
 addin_publisher_name = "Mark Brooker"
 
@@ -56,8 +56,8 @@ def add_manifest_entry(xml_file, file_type, file_name):
 manifest_xml = open(cur_dir + '/LOC/META-INF/manifest.xml', 'w')
 
 manifest_xml.write('<manifest:manifest>\n');
-add_manifest_entry(manifest_xml, 'uno-typelibrary;type=RDB', 'XLoc.rdb')
-add_manifest_entry(manifest_xml, 'configuration-data', 'LOC.xcu')
+add_manifest_entry(manifest_xml, 'uno-typelibrary;type=RDB', 'XLoc2.rdb')
+add_manifest_entry(manifest_xml, 'configuration-data', 'LOC2.xcu')
 add_manifest_entry(manifest_xml, 'uno-component;type=Python', 'loc.py')
 add_manifest_entry(manifest_xml, 'uno-component;type=Python', 'errors.py')
 add_manifest_entry(manifest_xml, 'uno-component;type=Python', 'exchange.py')
@@ -69,7 +69,7 @@ manifest_xml.close
 
 # LOC.xcu - Configuration file for the extension
 # The named UNO component instantiated by Python.
-instance_id = "com.loc.crypto.getinfo.python.Loc2Impl"
+instance_id = "com.loc.crypto.getinfo2.python.Loc2Impl"
 # Name of the Excel add-in if you want to share documents across OOo and Excel.
 excel_addin_name = ""
 
@@ -85,7 +85,7 @@ def define_function(xml_file, function_name, description, parameters):
     xml_file.write('          <value>Add-In</value>\n')
     xml_file.write('        </prop>\n')
     xml_file.write('        <prop oor:name="CompatibilityName">\n')
-    xml_file.write('          <value xml:lang="en">AutoAddIn.XLoc.' + function_name + '</value>\n')
+    xml_file.write('          <value xml:lang="en">AutoAddIn.XLoc2.' + function_name + '</value>\n')
     xml_file.write('        </prop>\n')
     xml_file.write('        <node oor:name="Parameters">\n')
 
@@ -104,7 +104,7 @@ def define_function(xml_file, function_name, description, parameters):
     xml_file.write('        </node>\n')
     xml_file.write('      </node>\n')
 
-loc_xml = open(cur_dir + '/LOC/LOC.xcu', 'w')
+loc_xml = open(cur_dir + '/LOC/LOC2.xcu', 'w')
 
 loc_xml.write('<?xml version="1.0" encoding="UTF-8"?>\n')
 loc_xml.write('<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="CalcAddIns" oor:package="org.openoffice.Office">\n')
@@ -113,13 +113,13 @@ loc_xml.write('  <node oor:name="' + instance_id + '" oor:op="replace">\n')
 loc_xml.write('    <node oor:name="AddInFunctions">\n')
 
 define_function(loc_xml, \
-    'getPoloniex', 'Fetches Poloniex Crypto Currency Data.  a = "TICKER", b = "DATACODE"', \
+    'cf1', 'Fetches Poloniex Crypto Currency Data.  a = "TICKER", b = "DATACODE"', \
     [('a', 'The ticker symbol.'), ('b', 'The data code.')])
 define_function(loc_xml, \
-    'getMarket', 'Fetches a snapshot of the whole market from Poloniex. No parameters', \
+    'cf2', 'Fetches a snapshot of the whole market from Poloniex. No parameters', \
     [] )
 define_function(loc_xml, \
-    'passccxt', 'Calls a ccxt function. a = "EXCHANGE", b = "FUNCTION", c = "CURRENCY"', \
+    'cf3', 'Calls a ccxt function. a = "EXCHANGE", b = "FUNCTION", c = "CURRENCY"', \
     [('a', 'The exchange to use'), ('b', 'The function on the exchange'), \
     ('c', 'The currency on the exchange')])
 

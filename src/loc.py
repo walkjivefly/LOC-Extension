@@ -11,7 +11,7 @@
 #
 
 import unohelper
-from com.loc.crypto.getinfo import XLoc
+from com.loc.crypto.getinfo2 import XLoc2
 from urllib.request import urlopen, Request
 import json
 import ssl
@@ -19,6 +19,7 @@ import ssl
 
 class Poloniex():
     def __init__(self):
+        # this is a nasty hack for an OpenSSL problem, the details of which I don't begin to understand.
         ssl._create_default_https_context = ssl._create_unverified_context
  
     def api_query(self, command, req={}):
@@ -47,13 +48,13 @@ class Poloniex():
         return self.api_query("returnMarketTradeHistory", {'currencyPair': currencyPair})
 
 
-class Loc2Impl(unohelper.Base, XLoc):
+class Loc2Impl(unohelper.Base, XLoc2):
     """Define the main class for the LOC extension """    
     def __init__( self, ctx ):
         self.ctx = ctx
 
-    def getPoloniex( self, ticker, datacode='last' ):
-        """Return Poloniex data. Mapped to PyUNO through the Xloc.rdb file"""
+    def cf1( self, ticker, datacode='last' ):
+        """Return Poloniex data. Mapped to PyUNO through the Xloc2.rdb file"""
         try:
             polo = Poloniex()
             result = float(polo.returnTicker()[ticker][datacode])
@@ -61,16 +62,19 @@ class Loc2Impl(unohelper.Base, XLoc):
             result = 'Something bad happened'
         return result
 
-    def getMarket( self ):
+    def cf2( self ):
         """Return whole market snapshot. For starters return the whole lot as one string. Later we will programmatically chop it up and insert it into a new sheet as a side effect."""
         try:
             polo = Poloniex()
-            result = polo.returnTicker()
+            tickers = polo.returnTicker()
+            result = ''
+            for t in tickers:
+                result = result + t + ':' + tickers[t]['last'] + ' '
         except:
             result = "Couldn't load market data"
         return result
 
-    def passccxt( self, parm1, parm2, parm3 ):
+    def cf3( self, parm1, parm2, parm3 ):
         """Placeholder function as interface to ccxt"""
         try:
             result = "Let's pretend the ccxt call worked!"
@@ -84,5 +88,5 @@ def createInstance( ctx ):
 
 g_ImplementationHelper = unohelper.ImplementationHelper()
 g_ImplementationHelper.addImplementation( \
-    createInstance,"com.loc.crypto.getinfo.python.Loc2Impl",
+    createInstance,"com.loc.crypto.getinfo2.python.Loc2Impl",
         ("com.sun.star.sheet.AddIn",),)

@@ -58,17 +58,17 @@ def main(argv):
 
 
 def poloniex_test(loc_py, ticker, datacode):
-    result = loc_py.getPoloniex(ticker, datacode)
+    result = loc_py.cf1(ticker, datacode)
     print (result)
     sys.exit()
     
 def poloniex_test2(loc_py):
-    result = loc_py.getMarket()
+    result = loc_py.cf2()
     print (result)
     sys.exit()
     
 def poloniex_test3(loc_py, exchange, function, ticker):
-    result = loc_py.passccxt(exchange, function, ticker)
+    result = loc_py.cf3(exchange, function, ticker)
     print (result)
     sys.exit()
     
