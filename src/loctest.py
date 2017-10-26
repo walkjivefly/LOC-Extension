@@ -28,11 +28,12 @@ import loc
 def main(argv):
     main_loc = loc.Loc2Impl(argv)
     arg_funct = ''
+    arg_exchange = ''
     arg_ticker = ''
     arg_datacode = ''
     try:
-        opts, args = getopt.getopt(argv, "f:t:d:",
-                                         ["function=","ticker=","datacode="])
+        opts, args = getopt.getopt(argv, "f:e:t:d:",
+                                         ["function=","exchange=","ticker=","datacode="])
     except getopt.GetoptError:
         usage(2)
     for opt, arg in opts:
@@ -40,44 +41,58 @@ def main(argv):
             usage()
         elif opt in ("-f", "--function"):
             arg_funct = arg
+        elif opt in ("-e", "--exchange"):
+            arg_exchange = arg
         elif opt in ("-t", "--ticker"):
             arg_ticker = arg
         elif opt in ("-d", "--datacode"):
             arg_datacode = arg
     print ("Function tested is", arg_funct)
+    if arg_funct == "ccxt":
+        print ("Exchange used is", arg_exchange)
     print ("Ticker used is", arg_ticker)
     print ("Datacode used is", arg_datacode)
+
     if arg_funct == "poloniex":
-        poloniex_test(main_loc, arg_ticker, arg_datacode)
-    elif arg_funct == "market":
-        poloniex_test2(main_loc)
+
+        loc_test(main_loc, arg_ticker, arg_datacode)
+    elif arg_funct == "bitfinex":
+        loc_test2(main_loc, arg_ticker, arg_datacode)
+    elif arg_funct == "bittrex":
+        loc_test3(main_loc, arg_ticker, arg_datacode)
     elif arg_funct == "ccxt":
-        poloniex_test3(main_loc, arg_ticker, arg_datacode, "dummy")
+        loc_test4(main_loc, arg_exchange, arg_ticker, arg_datacode)
     else:
         usage(0)
 
 
-def poloniex_test(loc_py, ticker, datacode):
+def loc_test(loc_py, ticker, datacode):
     result = loc_py.cf1(ticker, datacode)
     print (result)
     sys.exit()
     
-def poloniex_test2(loc_py):
-    result = loc_py.cf2()
+def loc_test2(loc_py, ticker, datacode):
+    result = loc_py.cf2(ticker, datacode)
     print (result)
     sys.exit()
     
-def poloniex_test3(loc_py, exchange, function, ticker):
-    result = loc_py.cf3(exchange, function, ticker)
+def loc_test3(loc_py, ticker, datacode):
+    result = loc_py.cf3(ticker, datacode)
+    print (result)
+    sys.exit()
+    
+def loc_test4(loc_py, exchange, function, ticker):
+    result = loc_py.cf4(exchange, function, ticker)
     print (result)
     sys.exit()
     
         
 def usage(err):
-    print ("Usage: loctest.py -f <function> -t <ticker> -d <datacode>")
-    print ("Available functions are poloniex|market|passccxt")
-    print ("When the function is poloniex, ticker is the crypto currency")
-    print ("you want data for, datacode is the data you require, one of:")
+    print ("Usage: loctest.py -f poloniex|bitfinex|bittrex -t <ticker> -d <datacode>")
+    print ("-- or --")
+    print ("       loctest.py -f ccxt -e <exchange> -t <ticker> -d <datacode>")
+    print ("ticker is the crypto currency you want data for,")
+    print (" datacode is the data you require, one of:")
     print ("quoteVolume, lowestAsk, percentChange, last, low24hr, high24hr, " \
            " baseVolume, id, isFrozen")
     sys.exit(err)

@@ -6,10 +6,12 @@ module com { module loc { module crypto { module getinfo2 {
     {
       // Modeled as an 'any' to allow it to be NULL/None/Missing.
       any cf1( [in] string a, [in] any b );
-      // No parms, just get the whole market
-      any cf2( );
+      // Modeled as an 'any' to allow it to be NULL/None/Missing.
+      any cf2( [in] string a, [in] any b );
+      // Modeled as an 'any' to allow it to be NULL/None/Missing.
+      any cf3( [in] string a, [in] any b );
       // Expecting parms to be exchange and function.
-      any cf3( [in] string a, [in] any b, [in] any c );
+      any cf4( [in] string a, [in] any b, [in] any c );
     };
 
 }; }; }; };
