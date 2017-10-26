@@ -11,7 +11,7 @@ module com { module loc { module crypto { module getinfo2 {
       // Modeled as an 'any' to allow it to be NULL/None/Missing.
       any cf3( [in] string a, [in] any b );
       // Expecting parms to be exchange and function.
-      any cf4( [in] string a, [in] any b, [in] any c );
+      any ccf4( [in] string a, [in] any b, [in] any c );
     };
 
 }; }; }; };

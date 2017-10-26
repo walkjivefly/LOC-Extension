@@ -70,6 +70,8 @@ class Loc2Impl(unohelper.Base, XLoc2):
 
     def cf1( self, ticker, datacode='last' ):
         """Return Poloniex data. Mapped to PyUNO through the Xloc2.rdb file"""
+        ticker = ticker.upper()
+        datacode = datecode.lower()
         try:
             polo = Poloniex()
             result = float(polo.returnTicker()[ticker][datacode])
@@ -79,6 +81,8 @@ class Loc2Impl(unohelper.Base, XLoc2):
 
     def cf2( self, ticker, datacode='last' ):
         """Return requested ticker data from Bitfinex"""
+        ticker = ticker.upper()
+        datacode = datecode.lower()
         try:
             fnex = bitfinex()
             result = fnex.fetch_ticker(ticker.upper())[datacode]
@@ -88,6 +92,8 @@ class Loc2Impl(unohelper.Base, XLoc2):
 
     def cf3( self, ticker, datacode='last' ):
         """Return requested ticker data from Bittrex"""
+        ticker = ticker.upper()
+        datacode = datecode.lower()
         try:
             trex = bittrex()
             result = trex.fetch_ticker(ticker.upper())[datacode]
@@ -96,9 +102,11 @@ class Loc2Impl(unohelper.Base, XLoc2):
         return result
 
     def cf4( self, exchng, ticker, datacode='last' ):
-        """Placeholder function as interface to ccxt"""
+        """Let ccxt do the work"""
+        exchng = exchng.lower()
+        ticker = ticker.upper()
+        datacode = datacode.lower()
         try:
-            exchng = exchng.lower()
             if exchng in exchanges:
                 if exchng == '_1broker':
                     xchng = _1broker()
@@ -282,13 +290,12 @@ class Loc2Impl(unohelper.Base, XLoc2):
                     xchng = yunbi()
                 elif exchng == 'zaif':
                     xchng = zaif()
-                result = xchng.fetch_ticker(ticker.upper())[datacode.lower()]
+                result = float(xchng.fetch_ticker(ticker)[datacode])
             else:
                 result = "Unsupported exchange: " + exchng
         except:
-            result = "Exception " + sys.exc_info()[0] + "in call to " + exchng
+            result = "Exception during fetch_ticker"
         return result
-
 
 def createInstance( ctx ):
     return Loc2Impl( ctx )
