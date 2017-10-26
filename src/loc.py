@@ -18,6 +18,7 @@ import ssl
 import sys
 import os
 import inspect
+import logging
 
 # Add current directory to path to import ccxt modules
 cmd_folder = os.path.realpath(os.path.abspath
@@ -28,6 +29,25 @@ if cmd_folder not in sys.path:
 
 from exchange import *  # noqa: F403
 from exchanges import * # noqa: F403
+
+# Create Logger
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+# Create console handler and set level to debug
+#ch = logging.StreamHandler()
+#ch.setLevel(logging.DEBUG)
+# Create file handler and set level to debug
+logfile = "/tmp/LOC_" + str(os.getpid())
+fh = logging.FileHandler(logfile, mode='a', encoding=None, delay=False)
+fh.setLevel(logging.DEBUG)
+# Create formatter
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+# Add formatter to handlers
+#ch.setFormatter(formatter)
+fh.setFormatter(formatter)
+# Add handlers to logger
+#logger.addHandler(ch)
+logger.addHandler(fh)
 
 
 class Poloniex():
@@ -67,14 +87,17 @@ class Loc2Impl(unohelper.Base, XLoc2):
         self.ctx = ctx
         # this is a nasty hack for an OpenSSL problem, the details of which I don't begin to understand.
         ssl._create_default_https_context = ssl._create_unverified_context
+        logger.info('========== New call ==========')
 
     def cf1( self, ticker, datacode='last' ):
         """Return Poloniex data. Mapped to PyUNO through the Xloc2.rdb file"""
         ticker = ticker.upper()
-        datacode = datecode.lower()
+        datacode = datacode.lower()
+        logger.info('cf1 ticker={} datacode={}'.format(ticker, datacode))
         try:
             polo = Poloniex()
             result = float(polo.returnTicker()[ticker][datacode])
+            logger.info('cf1 result={:.8f}'.format(result))
         except:
             result = 'Something bad happened'
         return result
@@ -82,10 +105,12 @@ class Loc2Impl(unohelper.Base, XLoc2):
     def cf2( self, ticker, datacode='last' ):
         """Return requested ticker data from Bitfinex"""
         ticker = ticker.upper()
-        datacode = datecode.lower()
+        datacode = datacode.lower()
+        logger.info('cf2 ticker={} datacode={}'.format(ticker, datacode))
         try:
             fnex = bitfinex()
-            result = fnex.fetch_ticker(ticker.upper())[datacode]
+            result = float(fnex.fetch_ticker(ticker.upper())[datacode])
+            logger.info('cf2 result={:.8f}'.format(result))
         except:
             result = "Failed to fetch Bitfinex data"
         return result
@@ -93,10 +118,12 @@ class Loc2Impl(unohelper.Base, XLoc2):
     def cf3( self, ticker, datacode='last' ):
         """Return requested ticker data from Bittrex"""
         ticker = ticker.upper()
-        datacode = datecode.lower()
+        datacode = datacode.lower()
+        logger.info('cf3 ticker={} datacode={}'.format(ticker, datacode))
         try:
             trex = bittrex()
             result = trex.fetch_ticker(ticker.upper())[datacode]
+            logger.info('cf3 result={:.8f}'.format(result))
         except:
             result = "Failed to fetch Bittrex data"
         return result
@@ -106,6 +133,7 @@ class Loc2Impl(unohelper.Base, XLoc2):
         exchng = exchng.lower()
         ticker = ticker.upper()
         datacode = datacode.lower()
+        logger.info('cf4 with exchange={} ticker={} datacode={}'.format(exchng, ticker, datacode))
         try:
             if exchng in exchanges:
                 if exchng == '_1broker':
@@ -291,10 +319,13 @@ class Loc2Impl(unohelper.Base, XLoc2):
                 elif exchng == 'zaif':
                     xchng = zaif()
                 result = float(xchng.fetch_ticker(ticker)[datacode])
+                logger.info('cf4 {} {}={:.8f}'.format(ticker, datacode, result))
             else:
+                logger.warning('cf4 invalid exchange {}'.format(exchng))
                 result = "Unsupported exchange: " + exchng
         except:
-            result = "Exception during fetch_ticker"
+            logging.error('cf4 exception {}'.format(sys.exc_info()[0]))
+            result = "Exception encountered"
         return result
 
 def createInstance( ctx ):
