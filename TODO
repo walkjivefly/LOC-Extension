@@ -1,3 +1,8 @@
 Some ideas for improvements/things todo:
 
 1. Further investigate caching
+
+2. Furher leverage ccxt to fetch more than just ticker data (eg: account
+   balances)
+
+3. 
