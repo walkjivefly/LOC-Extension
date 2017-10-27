@@ -11,14 +11,15 @@
 #
 # Based on David Capron's SMF-Extension which was in turn
 # Based on example by jan@biochemfusion.com
+# Embeds a snapshot of Igor Kroitor's amazing ccxt library
 #
 import os
 cur_dir = os.getcwd()
 
 # A unique ID for the extension.
 addin_id = "com.loc.crypto.getinfo"
-addin_version = "0.1.0"
-addin_displayname = "Crypto Currency Market Function Extension."
+addin_version = "0.2.0"
+addin_displayname = "LOC-Extension: LibreOffice calc Cryptocurrency market functions."
 addin_publisher_link = "https://github.com/walkjivefly/LOC-Extension"
 addin_publisher_name = "Mark Brooker"
 
@@ -48,7 +49,7 @@ desc_xml.write('</description>\n')
 
 desc_xml.close
 
-# manifest.xml - A List of files reference in the .rdb and their types.
+# manifest.xml - A List of files referenced in the .rdb and their types.
 def add_manifest_entry(xml_file, file_type, file_name):
     xml_file.write('<manifest:file-entry manifest:media-type="application/vnd.sun.star.' + file_type + '"\n')
     xml_file.write('    manifest:full-path="' + file_name + '"/>\n')
@@ -56,7 +57,7 @@ def add_manifest_entry(xml_file, file_type, file_name):
 manifest_xml = open(cur_dir + '/LOC/META-INF/manifest.xml', 'w')
 
 manifest_xml.write('<manifest:manifest>\n');
-add_manifest_entry(manifest_xml, 'uno-typelibrary;type=RDB', 'XLoc.rdb')
+add_manifest_entry(manifest_xml, 'uno-typelibrary;type=RDB', 'LOC.rdb')
 add_manifest_entry(manifest_xml, 'configuration-data', 'LOC.xcu')
 add_manifest_entry(manifest_xml, 'uno-component;type=Python', 'loc.py')
 manifest_xml.write('</manifest:manifest>\n')
@@ -81,7 +82,7 @@ def define_function(xml_file, function_name, description, parameters):
     xml_file.write('          <value>Add-In</value>\n')
     xml_file.write('        </prop>\n')
     xml_file.write('        <prop oor:name="CompatibilityName">\n')
-    xml_file.write('          <value xml:lang="en">AutoAddIn.XLoc.' + function_name + '</value>\n')
+    xml_file.write('          <value xml:lang="en">AutoAddIn.LOC.' + function_name + '</value>\n')
     xml_file.write('        </prop>\n')
     xml_file.write('        <node oor:name="Parameters">\n')
 
@@ -111,6 +112,10 @@ loc_xml.write('    <node oor:name="AddInFunctions">\n')
 define_function(loc_xml, \
     'getPoloniex', 'Fetches Poloniex Crypto Currency Data.  a = "TICKER", b = "DATACODE"', \
     [('a', 'The ticker symbol.'), ('b', 'The data code.')])
+define_function(loc_xml, \
+    'ccxt', 'Calls a ccxt fetch_ticker function. a = "EXCHANGE", b = "TICKER", c = "DATACODE"', \
+    [('a', 'The exchange to use'), ('b', 'The ticker symbol'), \
+    ('c', 'The data code')])
 
 loc_xml.write('    </node>\n')
 loc_xml.write('  </node>\n')

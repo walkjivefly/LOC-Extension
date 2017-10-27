@@ -8,12 +8,16 @@ mkdir "${PWD}"/LOC/
 mkdir "${PWD}"/LOC/META-INF/
 
 #Compile the binaries
-idlc -I /opt/libreoffice5.3/sdk/idl "${PWD}"/idl/XLoc.idl
-regmerge -v "${PWD}"/LOC/XLoc.rdb UCR "${PWD}"/idl/XLoc.urd
-rm "${PWD}"/idl/XLoc.urd
+idlc -I /opt/libreoffice5.3/sdk/idl "${PWD}"/idl/LOC.idl
+regmerge -v "${PWD}"/LOC/LOC.rdb UCR "${PWD}"/idl/LOC.urd
+rm "${PWD}"/idl/LOC.urd
 
 #Copy extension files and generate metadata
 cp -f "${PWD}"/src/loc.py "${PWD}"/LOC/
+cp -f "${PWD}"/src/errors.py "${PWD}"/LOC/
+cp -f "${PWD}"/src/exchange.py "${PWD}"/LOC/
+cp -f "${PWD}"/src/exchanges.py "${PWD}"/LOC/
+cp -f "${PWD}"/src/version.py "${PWD}"/LOC/
 cp -f "${PWD}"/src/description-en-US.txt "${PWD}"/LOC/
 python "${PWD}"/src/generate_metainfo.py
 
