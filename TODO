@@ -1,17 +1,3 @@
 Some ideas for improvements/things todo:
 
-1. Cache results to improve performance and reduce the likelihood of 
-   hitting the Poloniex 6 calls per second limit. A call to returnTicker
-   gets the prices for everything on the exchange so only 1 API call 
-   should be needed to get the prices for anything on the sheet. But
-   where to cache the results? What is the lifetime of the python 
-   session which services the request?
-
-2. Switch to using ccxt (https://github.com/kroitor/ccxt.git). This much 
-   more comprehensive wrapper talks to 77+ exchanges.
-
-3. 
-
-
-
-
+1. Further investigate caching
