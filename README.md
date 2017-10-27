@@ -1,17 +1,17 @@
-LibreOffice Calc crypto price lookup extension
+LibreOffice calc Crypto price lookup extension
 ===
-The LOC extension allows you to create customized spreadsheets with crypto currency market data directly from the web. The initial version supports only one source - [Poloniex](https://poloniex.com) - but others are planned.
+The LOC extension allows you to create customized spreadsheets with crypto currency market data directly from the web. This version provides 2 lookup functions: a dedicated getPoloniex() (for compatibility with version 0.1.0) and a generic ccxt() which uses an embedded snapshot of the amazing ccxt library. This means over 90 exchanges are now supported.
 
 ### Download   
-You can download the current version of the LOC Extension here [0.1.0](https://github.com/walkjivefly/LOC-Extension/releases/tag/v0.1.0)
+You can download the current version of the LOC Extension here [0.2.0](https://github.com/walkjivefly/LOC-Extension/releases/tag/v0.2.0)
 
-The LOC extension has been submitted for approval at the [LibreOffice Extension Center](https://extensions.libreoffice.org/extensions/loc-extension-for-libreoffice-calc).
+The LOC extension is also available from the [LibreOffice Extension Center](https://extensions.libreoffice.org/extensions/loc-extension-for-libreoffice-calc).
 
 **NOTE**: The extension itself is LOC.oxt.  The example .ods worksheet demonstrates how to use the extension.
 
 ### Usage
 
-The LOC Extension adds a new function to Calc:  
+The LOC Extension adds two new functions to Calc. The first is:  
 ```
 GETPOLONIEX(Ticker,Datacode) 
 ```  
@@ -22,9 +22,21 @@ In the latter case the data in A1 should be ```BTC_ETH```, not ```"BTC_ETH"```.
 
 **NOTE**: The full set of datacodes are demonstrated in the example .ods worksheets included with the release.
 
+The second new function is:
+```
+CCXT(Exchange, Ticker, Datacode)
+```
+
+Exchange is any exchange name supported by the embedded ccxt snapshot (version 1.9.262). Quotes **must** be used according to the same rules as for GETPOLONIEX().
+
+Ticker is a currency pair from the ccxt unified API.
+**NOTE**: The format of the ticker is different from that for GETPOLONIEX(). The valid values depend on the exchange being addressed.
+
+Datacode is one of the ccxt supported data items for the fetch_ticker function. The one you'll probably use most is "last" 
+
 ### Dependencies
 
-Version 0.1.0 is fully standalone. The 3rd-party Poloniex API wrapper requirement has been removed. 
+Version 0.2.0 is fully standalone. It includes an embedded snapshot of Igor Kroitor's ccxt. 
 
 ### Support
 
@@ -45,8 +57,11 @@ The LOC Extension is released under the [![][shield:LGPL3]][License:3.0] which i
 * You must track changes you make in the source files.
 * You must include or make available the source code with your release.
 
+ccxt is released under the MIT license.
+
 ### Other Contributors and Thanks!
 * madsailor - provided the original SMF Extension that LOC is based on
+* Igor Kroitor - actively maintains the ccxt library
 
 [GIT:release]: http://github.com/walkjivefly/LOC-Extension/releases/latest
 [License:3.0]: http://www.gnu.org/licenses/lgpl.html
