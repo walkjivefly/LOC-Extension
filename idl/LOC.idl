@@ -1,8 +1,8 @@
 #include </com/sun/star/uno/XInterface.idl>
 
-module com { module loc { module crypto { module getinfo2 {
+module com { module loc { module crypto { module getinfo {
 
-    interface XLoc2
+    interface LOC
     {
       // Modeled as an 'any' to allow it to be NULL/None/Missing.
       any getPoloniex( [in] string a, [in] any b );

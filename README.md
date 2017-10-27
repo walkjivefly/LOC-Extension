@@ -1,6 +1,6 @@
-LibreOffice calc Crypto price lookup extension
+LOC-Extension: LibreOffice calc Cryptocurrency market functions
 ===
-The LOC extension allows you to create customized spreadsheets with crypto currency market data directly from the web. This version provides 2 lookup functions: a dedicated getPoloniex() (for compatibility with version 0.1.0) and a generic ccxt() which uses an embedded snapshot of the amazing ccxt library. This means over 90 exchanges are now supported.
+The LOC extension allows you to create customized spreadsheets with cryptocurrency market data directly from the web. This version provides 2 lookup functions: a dedicated getPoloniex() (for compatibility with version 0.1.0) and a generic ccxt() which uses an embedded snapshot of the amazing ccxt library. This means over 90 exchanges are now supported.
 
 ### Download   
 You can download the current version of the LOC Extension here [0.2.0](https://github.com/walkjivefly/LOC-Extension/releases/tag/v0.2.0)

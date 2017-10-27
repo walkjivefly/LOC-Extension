@@ -26,7 +26,7 @@ if cmd_folder not in sys.path:
 import loc
 
 def main(argv):
-    main_loc = loc.Loc2Impl(argv)
+    main_loc = loc.LocImpl(argv)
     arg_funct = ''
     arg_exchange = ''
     arg_ticker = ''
@@ -54,47 +54,31 @@ def main(argv):
     print ("Datacode used is", arg_datacode)
 
     if arg_funct == "poloniex":
-
         loc_test(main_loc, arg_ticker, arg_datacode)
-    elif arg_funct == "bitfinex":
-        loc_test2(main_loc, arg_ticker, arg_datacode)
-    elif arg_funct == "bittrex":
-        loc_test3(main_loc, arg_ticker, arg_datacode)
     elif arg_funct == "ccxt":
-        loc_test4(main_loc, arg_exchange, arg_ticker, arg_datacode)
+        loc_test2(main_loc, arg_exchange, arg_ticker, arg_datacode)
     else:
         usage(0)
 
 
 def loc_test(loc_py, ticker, datacode):
-    result = loc_py.cf1(ticker, datacode)
+    result = loc_py.getPoloniex(ticker, datacode)
     print (result)
     sys.exit()
     
-def loc_test2(loc_py, ticker, datacode):
-    result = loc_py.cf2(ticker, datacode)
-    print (result)
-    sys.exit()
-    
-def loc_test3(loc_py, ticker, datacode):
-    result = loc_py.cf3(ticker, datacode)
-    print (result)
-    sys.exit()
-    
-def loc_test4(loc_py, exchange, ticker, datacode):
+def loc_test2(loc_py, exchange, ticker, datacode):
     result = loc_py.ccxt(exchange, ticker, datacode)
     print (result)
     sys.exit()
     
         
 def usage(err):
-    print ("Usage: loctest.py -f poloniex|bitfinex|bittrex -t <ticker> -d <datacode>")
+    print ("Usage: loctest.py -f poloniex -t <ticker> -d <datacode>")
     print ("-- or --")
     print ("       loctest.py -f ccxt -e <exchange> -t <ticker> -d <datacode>")
-    print ("ticker is the crypto currency you want data for,")
-    print (" datacode is the data you require, one of:")
-    print ("quoteVolume, lowestAsk, percentChange, last, low24hr, high24hr, " \
-           " baseVolume, id, isFrozen")
+    print ("   ticker is the crypto currency you want data for,")
+    print ("   datacode is the data you require, most likely 'last'")
+    print ("   exchange is the exchange to query when using the ccxt library")
     sys.exit(err)
         
 if __name__ == "__main__":

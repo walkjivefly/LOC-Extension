@@ -1,4 +1,4 @@
-#  loc.py - Pyuno/LO bridge to implement new functions for LibreOffice Calc
+#  loc.py - Pyuno/LO bridge to implement new functions for LibreOffice calc
 #
 #  Copyright (c) 2017 Mark Brooker (mark@walkjivefly.com)
 #
@@ -11,7 +11,7 @@
 #
 
 import unohelper
-from com.loc.crypto.getinfo2 import XLoc2
+from com.loc.crypto.getinfo import LOC
 from urllib.request import urlopen, Request
 import json
 import ssl
@@ -33,9 +33,6 @@ from exchanges import * # noqa: F403
 # Create Logger
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
-# Create console handler and set level to debug
-#ch = logging.StreamHandler()
-#ch.setLevel(logging.DEBUG)
 # Create file handler and set level to debug
 logfile = "/tmp/LOC_" + str(os.getpid())
 fh = logging.FileHandler(logfile, mode='a', encoding=None, delay=False)
@@ -43,10 +40,8 @@ fh.setLevel(logging.DEBUG)
 # Create formatter
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 # Add formatter to handlers
-#ch.setFormatter(formatter)
 fh.setFormatter(formatter)
 # Add handlers to logger
-#logger.addHandler(ch)
 logger.addHandler(fh)
 
 
@@ -81,7 +76,7 @@ class Poloniex():
         return self.api_query("returnMarketTradeHistory", {'currencyPair': currencyPair})
 
 
-class Loc2Impl(unohelper.Base, XLoc2):
+class LocImpl(unohelper.Base, LOC):
     """Define the main class for the LOC extension """    
     def __init__( self, ctx ):
         self.ctx = ctx
@@ -90,9 +85,9 @@ class Loc2Impl(unohelper.Base, XLoc2):
         ssl._create_default_https_context = ssl._create_unverified_context
 
     def getPoloniex( self, ticker, datacode='last' ):
-        """Return Poloniex data. Mapped to PyUNO through the Xloc2.rdb file"""
+        """Return Poloniex data. Mapped to PyUNO through the LOC.rdb file"""
         ticker = ticker.upper()
-        datacode = datacode.lower()
+        #datacode = datacode.lower()
         logger.info('getPoloniex ticker={} datacode={}'.format(ticker, datacode))
         try:
             polo = Poloniex()
@@ -299,7 +294,7 @@ class Loc2Impl(unohelper.Base, XLoc2):
                     result = "Fetched all tickers for " + exchng
                     logger.info('ccxt: {}'.format(result))
                 elif ticker in xchng.symbols: 
-                    result = float(xchng.fetch_ticker(ticker)[datacode])
+                    result = xchng.fetch_ticker(ticker)[datacode]
                     logger.info('ccxt {} {} {}={:.8f}'.format(exchng, ticker, datacode, result))
                 else:
                     result = "Unknown " + exchng + " pair: " + ticker
@@ -313,9 +308,9 @@ class Loc2Impl(unohelper.Base, XLoc2):
         return result
 
 def createInstance( ctx ):
-    return Loc2Impl( ctx )
+    return LocImpl( ctx )
 
 g_ImplementationHelper = unohelper.ImplementationHelper()
 g_ImplementationHelper.addImplementation( \
-    createInstance,"com.loc.crypto.getinfo2.python.Loc2Impl",
+    createInstance,"com.loc.crypto.getinfo.python.LocImpl",
         ("com.sun.star.sheet.AddIn",),)
