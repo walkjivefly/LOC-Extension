@@ -82,7 +82,7 @@ def loc_test3(loc_py, ticker, datacode):
     sys.exit()
     
 def loc_test4(loc_py, exchange, ticker, datacode):
-    result = loc_py.cf4(exchange, ticker, datacode)
+    result = loc_py.ccxt(exchange, ticker, datacode)
     print (result)
     sys.exit()
     

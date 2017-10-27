@@ -85,55 +85,30 @@ class Loc2Impl(unohelper.Base, XLoc2):
     """Define the main class for the LOC extension """    
     def __init__( self, ctx ):
         self.ctx = ctx
+        logger.info('========== New call ==========')
         # this is a nasty hack for an OpenSSL problem, the details of which I don't begin to understand.
         ssl._create_default_https_context = ssl._create_unverified_context
-        logger.info('========== New call ==========')
 
-    def cf1( self, ticker, datacode='last' ):
+    def getPoloniex( self, ticker, datacode='last' ):
         """Return Poloniex data. Mapped to PyUNO through the Xloc2.rdb file"""
         ticker = ticker.upper()
         datacode = datacode.lower()
-        logger.info('cf1 ticker={} datacode={}'.format(ticker, datacode))
+        logger.info('getPoloniex ticker={} datacode={}'.format(ticker, datacode))
         try:
             polo = Poloniex()
             result = float(polo.returnTicker()[ticker][datacode])
-            logger.info('cf1 result={:.8f}'.format(result))
+            logger.info('getPoloniex result={:.8f}'.format(result))
         except:
             result = 'Something bad happened'
         return result
 
-    def cf2( self, ticker, datacode='last' ):
-        """Return requested ticker data from Bitfinex"""
-        ticker = ticker.upper()
-        datacode = datacode.lower()
-        logger.info('cf2 ticker={} datacode={}'.format(ticker, datacode))
-        try:
-            fnex = bitfinex()
-            result = float(fnex.fetch_ticker(ticker.upper())[datacode])
-            logger.info('cf2 result={:.8f}'.format(result))
-        except:
-            result = "Failed to fetch Bitfinex data"
-        return result
-
-    def cf3( self, ticker, datacode='last' ):
-        """Return requested ticker data from Bittrex"""
-        ticker = ticker.upper()
-        datacode = datacode.lower()
-        logger.info('cf3 ticker={} datacode={}'.format(ticker, datacode))
-        try:
-            trex = bittrex()
-            result = trex.fetch_ticker(ticker.upper())[datacode]
-            logger.info('cf3 result={:.8f}'.format(result))
-        except:
-            result = "Failed to fetch Bittrex data"
-        return result
-
-    def cf4( self, exchng, ticker, datacode='last' ):
+    def ccxt( self, exchng, ticker, datacode='last' ):
         """Let ccxt do the work"""
         exchng = exchng.lower()
         ticker = ticker.upper()
         datacode = datacode.lower()
-        logger.info('cf4 with exchange={} ticker={} datacode={}'.format(exchng, ticker, datacode))
+        result = ''
+        logger.info('ccxt: exchange={} ticker={} datacode={}'.format(exchng, ticker, datacode))
         try:
             if exchng in exchanges:
                 if exchng == '_1broker':
@@ -318,13 +293,22 @@ class Loc2Impl(unohelper.Base, XLoc2):
                     xchng = yunbi()
                 elif exchng == 'zaif':
                     xchng = zaif()
-                result = float(xchng.fetch_ticker(ticker)[datacode])
-                logger.info('cf4 {} {}={:.8f}'.format(ticker, datacode, result))
+                markets = xchng.load_markets()
+                if ticker in ('CACHE', 'RELOAD'):
+                    xchng.fetch_tickers()
+                    result = "Fetched all tickers for " + exchng
+                    logger.info('ccxt: {}'.format(result))
+                elif ticker in xchng.symbols: 
+                    result = float(xchng.fetch_ticker(ticker)[datacode])
+                    logger.info('ccxt {} {} {}={:.8f}'.format(exchng, ticker, datacode, result))
+                else:
+                    result = "Unknown " + exchng + " pair: " + ticker
+                    logger.error('ccxt: {}'.format(result))
             else:
-                logger.warning('cf4 invalid exchange {}'.format(exchng))
                 result = "Unsupported exchange: " + exchng
+                logger.error('ccxt: {}'.format(result))
         except:
-            logging.error('cf4 exception {}'.format(sys.exc_info()[0]))
+            logging.error('ccxt: exception {}'.format(sys.exc_info()[0]))
             result = "Exception encountered"
         return result
 

@@ -109,16 +109,10 @@ loc_xml.write('  <node oor:name="' + instance_id + '" oor:op="replace">\n')
 loc_xml.write('    <node oor:name="AddInFunctions">\n')
 
 define_function(loc_xml, \
-    'cf1', 'Fetches Poloniex Crypto Currency Data.  a = "TICKER", b = "DATACODE"', \
+    'getPoloniex', 'Fetches Poloniex Crypto Currency Data.  a = "TICKER", b = "DATACODE"', \
     [('a', 'The ticker symbol.'), ('b', 'The data code.')])
 define_function(loc_xml, \
-    'cf2', 'Fetches Bitfinex Crypto Currency Data.  a = "TICKER", b = "DATACODE"', \
-    [('a', 'The ticker symbol.'), ('b', 'The data code.')])
-define_function(loc_xml, \
-    'cf3', 'Fetches Bittrex Crypto Currency Data.  a = "TICKER", b = "DATACODE"', \
-    [('a', 'The ticker symbol.'), ('b', 'The data code.')])
-define_function(loc_xml, \
-    'cf4', 'Calls a ccxt function. a = "EXCHANGE", b = "TICKER", c = "DATACODE"', \
+    'ccxt', 'Calls a ccxt fetch_ticker function. a = "EXCHANGE", b = "TICKER", c = "DATACODE"', \
     [('a', 'The exchange to use'), ('b', 'The ticker symbol'), \
     ('c', 'The data code')])
 
