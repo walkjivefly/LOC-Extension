@@ -34,6 +34,10 @@ Ticker is a currency pair from the ccxt unified API.
 
 Datacode is one of the ccxt supported data items for the fetch_ticker function. The one you'll probably use most is "last" 
 
+### Upgrading
+
+The LibreOffice extension mechanism is poorly documented and extremely fragile. It is recommended that you remove the previous version of LOC-Extension before adding this one. If you use the replace option you might or might not end up with indecipherable error messages or an unusable extension. If you really screw things up I recommend closing LibreOffice, renaming the entire customisation directory (~/.config/libreoffice/4 on linux), restarting LibreOffice and re-installing (all) your extensions. 
+
 ### Dependencies
 
 Version 0.2.0 is fully standalone. It includes an embedded snapshot of Igor Kroitor's ccxt. 
