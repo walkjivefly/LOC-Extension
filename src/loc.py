@@ -34,7 +34,7 @@ from exchanges import * # noqa: F403
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 # Create file handler and set level to debug
-logfile = "/tmp/LOC_" + str(os.getpid())
+logfile = '/tmp/LOC_' + str(os.getpid())
 fh = logging.FileHandler(logfile, mode='a', encoding=None, delay=False)
 fh.setLevel(logging.DEBUG)
 # Create formatter
@@ -51,29 +51,29 @@ class Poloniex():
         ssl._create_default_https_context = ssl._create_unverified_context
  
     def api_query(self, command, req={}):
-        if(command == "returnTicker" or command == "return24Volume"):
+        if(command == 'returnTicker' or command == 'return24Volume'):
             ret = urlopen(Request('https://poloniex.com/public?command=' + command))
             return json.loads(ret.read().decode('utf8'))
-        elif(command == "returnOrderBook"):
+        elif(command == 'returnOrderBook'):
             ret = urlopen(Request('https://poloniex.com/public?command=' + command + '&currencyPair=' + str(req['currencyPair'])))
             return json.loads(ret.read())
-        elif(command == "returnMarketTradeHistory"):
-            ret = urlopen(Request('https://poloniex.com/public?command=' + "returnTradeHistory" + '&currencyPair=' + str(req['currencyPair'])))
+        elif(command == 'returnMarketTradeHistory'):
+            ret = urlopen(Request('https://poloniex.com/public?command=' + 'returnTradeHistory' + '&currencyPair=' + str(req['currencyPair'])))
             return json.loads(ret.read())
         else:
             return 'Unknown request'
 
     def returnTicker(self):
-        return self.api_query("returnTicker")
+        return self.api_query('returnTicker')
 
     def return24Volume(self):
-        return self.api_query("return24Volume")
+        return self.api_query('return24Volume')
 
     def returnOrderBook (self, currencyPair):
-        return self.api_query("returnOrderBook", {'currencyPair': currencyPair})
+        return self.api_query('returnOrderBook', {'currencyPair': currencyPair})
 
     def returnMarketTradeHistory (self, currencyPair):
-        return self.api_query("returnMarketTradeHistory", {'currencyPair': currencyPair})
+        return self.api_query('returnMarketTradeHistory', {'currencyPair': currencyPair})
 
 
 class LocImpl(unohelper.Base, LOC):
@@ -291,20 +291,20 @@ class LocImpl(unohelper.Base, LOC):
                 markets = xchng.load_markets()
                 if ticker in ('CACHE', 'RELOAD'):
                     xchng.fetch_tickers()
-                    result = "Fetched all tickers for " + exchng
+                    result = 'Fetched all tickers for ' + exchng
                     logger.info('ccxt: {}'.format(result))
                 elif ticker in xchng.symbols: 
                     result = xchng.fetch_ticker(ticker)[datacode]
                     logger.info('ccxt {} {} {}={:.8f}'.format(exchng, ticker, datacode, result))
                 else:
-                    result = "Unknown " + exchng + " pair: " + ticker
+                    result = 'Unknown ' + exchng + ' pair: ' + ticker
                     logger.error('ccxt: {}'.format(result))
             else:
-                result = "Unsupported exchange: " + exchng
+                result = 'Unsupported exchange: ' + exchng
                 logger.error('ccxt: {}'.format(result))
         except:
             logging.error('ccxt: exception {}'.format(sys.exc_info()[0]))
-            result = "Exception encountered"
+            result = 'Exception encountered'
         return result
 
 def createInstance( ctx ):
@@ -312,5 +312,5 @@ def createInstance( ctx ):
 
 g_ImplementationHelper = unohelper.ImplementationHelper()
 g_ImplementationHelper.addImplementation( \
-    createInstance,"com.loc.crypto.getinfo.python.LocImpl",
-        ("com.sun.star.sheet.AddIn",),)
+    createInstance,'com.loc.crypto.getinfo.python.LocImpl',
+        ('com.sun.star.sheet.AddIn',),)

@@ -32,30 +32,30 @@ def main(argv):
     arg_ticker = ''
     arg_datacode = ''
     try:
-        opts, args = getopt.getopt(argv, "f:e:t:d:",
-                                         ["function=","exchange=","ticker=","datacode="])
+        opts, args = getopt.getopt(argv, 'f:e:t:d:',
+                                         ['function=','exchange=','ticker=','datacode='])
     except getopt.GetoptError:
         usage(2)
     for opt, arg in opts:
-        if opt in ("-h", "--help"):
+        if opt in ('-h', '--help'):
             usage()
-        elif opt in ("-f", "--function"):
+        elif opt in ('-f', '--function'):
             arg_funct = arg
-        elif opt in ("-e", "--exchange"):
+        elif opt in ('-e', '--exchange'):
             arg_exchange = arg
-        elif opt in ("-t", "--ticker"):
+        elif opt in ('-t', '--ticker'):
             arg_ticker = arg
-        elif opt in ("-d", "--datacode"):
+        elif opt in ('-d', '--datacode'):
             arg_datacode = arg
-    print ("Function tested is", arg_funct)
-    if arg_funct == "ccxt":
-        print ("Exchange used is", arg_exchange)
-    print ("Ticker used is", arg_ticker)
-    print ("Datacode used is", arg_datacode)
+    print ('Function tested is', arg_funct)
+    if arg_funct == 'ccxt':
+        print ('Exchange used is', arg_exchange)
+    print ('Ticker used is', arg_ticker)
+    print ('Datacode used is', arg_datacode)
 
-    if arg_funct == "poloniex":
+    if arg_funct == 'poloniex':
         loc_test(main_loc, arg_ticker, arg_datacode)
-    elif arg_funct == "ccxt":
+    elif arg_funct == 'ccxt':
         loc_test2(main_loc, arg_exchange, arg_ticker, arg_datacode)
     else:
         usage(0)
@@ -73,13 +73,14 @@ def loc_test2(loc_py, exchange, ticker, datacode):
     
         
 def usage(err):
-    print ("Usage: loctest.py -f poloniex -t <ticker> -d <datacode>")
-    print ("-- or --")
-    print ("       loctest.py -f ccxt -e <exchange> -t <ticker> -d <datacode>")
-    print ("   ticker is the crypto currency you want data for,")
-    print ("   datacode is the data you require, most likely 'last'")
-    print ("   exchange is the exchange to query when using the ccxt library")
+    print ('Usage: loctest.py -f poloniex -t <ticker> -d <datacode>')
+    print ('       -- or --')
+    print ('       loctest.py -f ccxt -e <exchange> -t <ticker> -d <datacode>')
+    print ('')
+    print ('        ticker is the crypto currency you want data for,')
+    print ('        datacode is the data you require, most likely "last"')
+    print ('        exchange is the exchange to query when using the ccxt library')
     sys.exit(err)
         
-if __name__ == "__main__":
+if __name__ == '__main__':
     main(sys.argv[1:])

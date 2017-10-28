@@ -17,11 +17,11 @@ import os
 cur_dir = os.getcwd()
 
 # A unique ID for the extension.
-addin_id = "com.loc.crypto.getinfo"
-addin_version = "0.2.0"
-addin_displayname = "LOC-Extension: LibreOffice calc Cryptocurrency market functions."
-addin_publisher_link = "https://github.com/walkjivefly/LOC-Extension"
-addin_publisher_name = "Mark Brooker"
+addin_id = 'com.loc.crypto.getinfo'
+addin_version = '0.2.0'
+addin_displayname = 'LOC-Extension: LibreOffice calc Cryptocurrency market functions.'
+addin_publisher_link = 'https://github.com/walkjivefly/LOC-Extension'
+addin_publisher_name = 'Mark Brooker'
 
 # description.xml
 desc_xml = open(cur_dir + '/LOC/description.xml', 'w')
@@ -66,9 +66,9 @@ manifest_xml.close
 
 # LOC.xcu - Configuration file for the extension
 # The named UNO component instantiated by Python.
-instance_id = "com.loc.crypto.getinfo.python.LocImpl"
+instance_id = 'com.loc.crypto.getinfo.python.LocImpl'
 # Name of the Excel add-in if you want to share documents across OOo and Excel.
-excel_addin_name = ""
+excel_addin_name = ''
 
 def define_function(xml_file, function_name, description, parameters):
     xml_file.write('      <node oor:name="' + function_name + '" oor:op="replace">\n')
@@ -88,7 +88,7 @@ def define_function(xml_file, function_name, description, parameters):
 
     for p, desc in parameters:
         # Optional parameters will have a displayname enclosed in square brackets.
-        p_name = p.strip("[]")        
+        p_name = p.strip('[]')        
         xml_file.write('          <node oor:name="' + p_name + '" oor:op="replace">\n')
         xml_file.write('            <prop oor:name="DisplayName">\n')
         xml_file.write('              <value xml:lang="en">' + p_name + '</value>\n')
