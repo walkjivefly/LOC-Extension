@@ -47,8 +47,7 @@ logger.addHandler(fh)
 
 class Poloniex():
     def __init__(self):
-        # this is a nasty hack for an OpenSSL problem, the details of which I don't begin to understand.
-        ssl._create_default_https_context = ssl._create_unverified_context
+        pass
  
     def api_query(self, command, req={}):
         if(command == 'returnTicker' or command == 'return24Volume'):
