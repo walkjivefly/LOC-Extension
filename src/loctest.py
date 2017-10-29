@@ -60,7 +60,6 @@ def main(argv):
     else:
         usage(0)
 
-
 def loc_test(loc_py, ticker, datacode):
     result = loc_py.getPoloniex(ticker, datacode)
     print (result)
@@ -71,7 +70,6 @@ def loc_test2(loc_py, exchange, ticker, datacode):
     print (result)
     sys.exit()
     
-        
 def usage(err):
     print ('Usage: loctest.py -f poloniex -t <ticker> -d <datacode>')
     print ('       -- or --')

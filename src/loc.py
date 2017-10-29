@@ -180,7 +180,7 @@ class LocImpl(unohelper.Base, LOC):
                 elif exchng == 'coinfloor':
                     xchng = coinfloor()
                 elif exchng == 'coingi':
-                    xchng = coinigi()
+                    xchng = coingi()
                 elif exchng == 'coinmarketcap':
                     xchng = coinmarketcap()
                 elif exchng == 'coinmate':
@@ -262,7 +262,7 @@ class LocImpl(unohelper.Base, LOC):
                 elif exchng == 'quoine':
                     xchng = quoine()
                 elif exchng == 'southxchange':
-                    xchng = southexchange()
+                    xchng = southxchange()
                 elif exchng == 'surbitcoin':
                     xchng = surbitcoin()
                 elif exchng == 'tidex':
@@ -288,13 +288,8 @@ class LocImpl(unohelper.Base, LOC):
                 elif exchng == 'zaif':
                     xchng = zaif()
                 markets = xchng.load_markets()
-                if ticker == 'RELOAD':
-                    markets = xchng.load_markets(True)
-                    result = 'Reloaded all tickers for ' + exchng
-                    logger.info('ccxt: {}'.format(result))
-                elif ticker in xchng.symbols: 
-                    #result = xchng.fetch_ticker(ticker)[datacode]
-                    result = float(markets[ticker]['info'][datacode])
+                if ticker in xchng.symbols: 
+                    result = xchng.fetch_ticker(ticker)[datacode]
                     logger.info('ccxt {} {} {}={:.8f}'.format(exchng, ticker, datacode, result))
                 else:
                     result = 'Unknown ' + exchng + ' pair: ' + ticker
