@@ -288,12 +288,13 @@ class LocImpl(unohelper.Base, LOC):
                 elif exchng == 'zaif':
                     xchng = zaif()
                 markets = xchng.load_markets()
-                if ticker in ('CACHE', 'RELOAD'):
-                    xchng.fetch_tickers()
-                    result = 'Fetched all tickers for ' + exchng
+                if ticker == 'RELOAD':
+                    markets = xchng.load_markets(True)
+                    result = 'Reloaded all tickers for ' + exchng
                     logger.info('ccxt: {}'.format(result))
                 elif ticker in xchng.symbols: 
-                    result = xchng.fetch_ticker(ticker)[datacode]
+                    #result = xchng.fetch_ticker(ticker)[datacode]
+                    result = float(markets[ticker]['info'][datacode])
                     logger.info('ccxt {} {} {}={:.8f}'.format(exchng, ticker, datacode, result))
                 else:
                     result = 'Unknown ' + exchng + ' pair: ' + ticker
