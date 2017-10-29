@@ -272,7 +272,7 @@ class LocImpl(unohelper.Base, LOC):
                 elif exchng == 'urdubit':
                     xchng = urdubit()
                 elif exchng == 'vaultoro':
-                    xchng = vaultpro()
+                    xchng = vaultoro()
                 elif exchng == 'vbtc':
                     xchng = vbtc()
                 elif exchng == 'virwox':
