@@ -31,18 +31,18 @@ from exchange import *  # noqa: F403
 from exchanges import * # noqa: F403
 
 # Create Logger
-logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
+#logger = logging.getLogger()
+#logger.setLevel(logging.DEBUG)
 # Create file handler and set level to debug
-logfile = '/tmp/LOC_' + str(os.getpid())
-fh = logging.FileHandler(logfile, mode='a', encoding=None, delay=False)
-fh.setLevel(logging.DEBUG)
+#logfile = '/tmp/LOC_' + str(os.getpid())
+#fh = logging.FileHandler(logfile, mode='a', encoding=None, delay=False)
+#fh.setLevel(logging.DEBUG)
 # Create formatter
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+#formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 # Add formatter to handlers
-fh.setFormatter(formatter)
+#fh.setFormatter(formatter)
 # Add handlers to logger
-logger.addHandler(fh)
+#logger.addHandler(fh)
 
 
 class Poloniex():
@@ -79,7 +79,7 @@ class LocImpl(unohelper.Base, LOC):
     """Define the main class for the LOC extension """    
     def __init__( self, ctx ):
         self.ctx = ctx
-        logger.info('========== New call ==========')
+        #logger.info('========== New call ==========')
         # this is a nasty hack for an OpenSSL problem, the details of which I don't begin to understand.
         ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -87,11 +87,11 @@ class LocImpl(unohelper.Base, LOC):
         """Return Poloniex data. Mapped to PyUNO through the LOC.rdb file"""
         ticker = ticker.upper()
         #datacode = datacode.lower()
-        logger.info('getPoloniex ticker={} datacode={}'.format(ticker, datacode))
+        #logger.info('getPoloniex ticker={} datacode={}'.format(ticker, datacode))
         try:
             polo = Poloniex()
             result = float(polo.returnTicker()[ticker][datacode])
-            logger.info('getPoloniex result={:.8f}'.format(result))
+            #logger.info('getPoloniex result={:.8f}'.format(result))
         except:
             result = 'Something bad happened'
         return result
@@ -102,7 +102,7 @@ class LocImpl(unohelper.Base, LOC):
         ticker = ticker.upper()
         datacode = datacode.lower()
         result = ''
-        logger.info('ccxt: exchange={} ticker={} datacode={}'.format(exchng, ticker, datacode))
+        #logger.info('ccxt: exchange={} ticker={} datacode={}'.format(exchng, ticker, datacode))
         try:
             if exchng in exchanges:
                 if exchng == '_1broker':
@@ -290,15 +290,15 @@ class LocImpl(unohelper.Base, LOC):
                 markets = xchng.load_markets()
                 if ticker in xchng.symbols: 
                     result = xchng.fetch_ticker(ticker)[datacode]
-                    logger.info('ccxt {} {} {}={:.8f}'.format(exchng, ticker, datacode, result))
+                    #logger.info('ccxt {} {} {}={:.8f}'.format(exchng, ticker, datacode, result))
                 else:
                     result = 'Unknown ' + exchng + ' pair: ' + ticker
-                    logger.error('ccxt: {}'.format(result))
+                    #logger.error('ccxt: {}'.format(result))
             else:
                 result = 'Unsupported exchange: ' + exchng
-                logger.error('ccxt: {}'.format(result))
+                #logger.error('ccxt: {}'.format(result))
         except:
-            logger.error('ccxt: exception {}'.format(sys.exc_info()[0]))
+            #logger.error('ccxt: exception {}'.format(sys.exc_info()[0]))
             result = 'Exception encountered'
         return result
 
