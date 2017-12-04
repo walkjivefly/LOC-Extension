@@ -298,7 +298,7 @@ class LocImpl(unohelper.Base, LOC):
                 result = 'Unsupported exchange: ' + exchng
                 logger.error('ccxt: {}'.format(result))
         except:
-            logging.error('ccxt: exception {}'.format(sys.exc_info()[0]))
+            logger.error('ccxt: exception {}'.format(sys.exc_info()[0]))
             result = 'Exception encountered'
         return result
 
