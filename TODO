@@ -1,8 +1,11 @@
 Some ideas for improvements/things todo:
 
-1. Further investigate caching
+1. Implement caching for the exchanges which provide full market information 
+   in the ccxt load_markets() call.
 
-2. Furher leverage ccxt to fetch more than just ticker data (eg: account
+2. Further leverage ccxt to fetch more than just ticker data (eg: account
    balances)
 
-3. 
+3. Special handling for ccxt coinmarketcap
+
+4. 
