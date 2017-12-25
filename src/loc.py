@@ -44,6 +44,15 @@ fh.setFormatter(formatter)
 # Add handlers to logger
 logger.addHandler(fh)
 
+# ccxt function handles
+handles = {}
+for x in exchanges:
+    handles[x] = None
+
+# ccxt exchanges with caching
+caching = ['bitmex', 'coinmarketcap', 'gatecoin', 'lakebtc', 'livecoin',
+           'luno', 'nova', 'poloniex', 'qryptos', 'quoine', 'therock',
+           'vaultoro']
 
 class Poloniex():
     def __init__(self):
@@ -136,7 +145,11 @@ class LocImpl(unohelper.Base, LOC):
                 elif exchng == 'bitmarket':
                     xchng = bitmarket()
                 elif exchng == 'bitmex':
-                    xchng = bitmex()
+                    if handles[exchng] == None:
+                        xchng = bitmex()
+                        handles[exchng] = xchng
+                    else:
+                        xchng = handles[exchng]
                 elif exchng == 'bitso':
                     xchng = bitso()
                 elif exchng == 'bitstamp1':
@@ -182,7 +195,11 @@ class LocImpl(unohelper.Base, LOC):
                 elif exchng == 'coingi':
                     xchng = coingi()
                 elif exchng == 'coinmarketcap':
-                    xchng = coinmarketcap()
+                    if handles[exchng] == None:
+                        xchng = coinmarketcap()
+                        handles[exchng] = xchng
+                    else:
+                        xchng = handles[exchng]
                 elif exchng == 'coinmate':
                     xchng = coinmate()
                 elif exchng == 'coinsecure':
@@ -204,7 +221,11 @@ class LocImpl(unohelper.Base, LOC):
                 elif exchng == 'fybsg':
                     xchng = fybsg()
                 elif exchng == 'gatecoin':
-                    xchng = gatecoin()
+                    if handles[exchng] == None:
+                        xchng = gatecoin()
+                        handles[exchng] = xchng
+                    else:
+                        xchng = handles[exchng]
                 elif exchng == 'gateio':
                     xchng = gateio()
                 elif exchng == 'gdax':
@@ -232,19 +253,35 @@ class LocImpl(unohelper.Base, LOC):
                 elif exchng == 'kuna':
                     xchng = kuna()
                 elif exchng == 'lakebtc':
-                    xchng = lakebtc()
+                    if handles[exchng] == None:
+                        xchng = lakebtc()
+                        handles[exchng] = xchng
+                    else:
+                        xchng = handles[exchng]
                 elif exchng == 'livecoin':
-                    xchng = livecoin()
+                    if handles[exchng] == None:
+                        xchng = livecoin()
+                        handles[exchng] = xchng
+                    else:
+                        xchng = handles[exchng]
                 elif exchng == 'liqui':
                     xchng = liqui()
                 elif exchng == 'luno':
-                    xchng = luno()
+                    if handles[exchng] == None:
+                        xchng = luno()
+                        handles[exchng] = xchng
+                    else:
+                        xchng = handles[exchng]
                 elif exchng == 'mercado':
                     xchng = mercado()
                 elif exchng == 'mixcoins':
                     xchng = mixcoins()
                 elif exchng == 'nova':
-                    xchng = nova()
+                    if handles[exchng] == None:
+                        xchng = nova()
+                        handles[exchng] = xchng
+                    else:
+                        xchng = handles[exchng]
                 elif exchng == 'okcoincny':
                     xchng = okcoincny()
                 elif exchng == 'okcoinusd':
@@ -254,13 +291,25 @@ class LocImpl(unohelper.Base, LOC):
                 elif exchng == 'paymium':
                     xchng = paymium()
                 elif exchng == 'poloniex':
-                    xchng = poloniex()
+                    if handles[exchng] == None:
+                        xchng = poloniex()
+                        handles[exchng] = xchng
+                    else:
+                        xchng = handles[exchng]
                 elif exchng == 'quadrigacx':
                     xchng = quadrigacx()
                 elif exchng == 'qryptos':
-                    xchng = qryptos()
+                    if handles[exchng] == None:
+                        xchng = qryptos()
+                        handles[exchng] = xchng
+                    else:
+                        xchng = handles[exchng]
                 elif exchng == 'quoine':
-                    xchng = quoine()
+                    if handles[exchng] == None:
+                        xchng = quoine()
+                        handles[exchng] = xchng
+                    else:
+                        xchng = handles[exchng]
                 elif exchng == 'southxchange':
                     xchng = southxchange()
                 elif exchng == 'surbitcoin':
@@ -268,11 +317,19 @@ class LocImpl(unohelper.Base, LOC):
                 elif exchng == 'tidex':
                     xchng = tidex()
                 elif exchng == 'therock':
-                    xchng = therock()
+                    if handles[exchng] == None:
+                        xchng = therock()
+                        handles[exchng] = xchng
+                    else:
+                        xchng = handles[exchng]
                 elif exchng == 'urdubit':
                     xchng = urdubit()
                 elif exchng == 'vaultoro':
-                    xchng = vaultoro()
+                    if handles[exchng] == None:
+                        xchng = vaultoro()
+                        handles[exchng] = xchng
+                    else:
+                        xchng = handles[exchng]
                 elif exchng == 'vbtc':
                     xchng = vbtc()
                 elif exchng == 'virwox':
@@ -303,11 +360,16 @@ class LocImpl(unohelper.Base, LOC):
                         result = float(t['info'][datacode])
                         logger.info('ccxt: {} {} {} = {}'.format(exchng, ticker, datacode, result))
                     # end of coinmarketcap
-                elif exchng in ('gatecoin', 'lakebtc', 'livecoin', 'poloniex', 'therock'):
-                    markets = xchng.load_markets()
+                elif exchng in caching:
+                    markets = xchng.markets
+                    if markets == None:
+                        markets = xchng.load_markets()
                     if ticker == 'RELOAD':
                         markets = xchng.load_markets(True)
                         result = 'Reloaded all tickers for ' + exchng
+                        logger.info('ccxt: {}'.format(result))
+                    elif ticker == 'NOP':
+                        result = 'Specify RELOAD to refresh cached data' 
                         logger.info('ccxt: {}'.format(result))
                     elif ticker in xchng.symbols:
                         result = float(markets[ticker]['info'][datacode])
