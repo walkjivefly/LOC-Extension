@@ -18,7 +18,7 @@ cur_dir = os.getcwd()
 
 # A unique ID for the extension.
 addin_id = 'com.loc.crypto.getinfo'
-addin_version = '0.2.1'
+addin_version = '0.2.3'
 addin_displayname = 'LOC-Extension: LibreOffice calc Cryptocurrency market functions.'
 addin_publisher_link = 'https://github.com/walkjivefly/LOC-Extension'
 addin_publisher_name = 'Mark Brooker'

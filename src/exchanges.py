@@ -10140,21 +10140,21 @@ class coinmarketcap (Exchange):
                     ],
                 },
             },
-            'currencies': [
-                'AUD',
-                'BRL',
-                'CAD',
-                'CHF',
-                'CNY',
-                'EUR',
-                'GBP',
-                'HKD',
-                'IDR',
-                'INR',
-                'JPY',
-                'KRW',
-                'MXN',
-                'RUB',
+            'currencyCodes': [
+                #'AUD',
+                #'BRL',
+                #'CAD',
+                #'CHF',
+                #'CNY',
+                #'EUR',
+                #'GBP',
+                #'HKD',
+                #'IDR',
+                #'INR',
+                #'JPY',
+                #'KRW',
+                #'MXN',
+                #'RUB',
                 'USD',
             ],
         }
@@ -10165,15 +10165,18 @@ class coinmarketcap (Exchange):
         raise ExchangeError('Fetching order books is not supported by the API of ' + self.id)
 
     def fetch_markets(self):
-        markets = self.publicGetTicker()
+        markets = self.publicGetTicker({
+            'limit' : 0,
+        })
         result = []
         for p in range(0, len(markets)):
             market = markets[p]
-            for c in range(0, len(self.currencies)):
+            currencies = self.currencyCodes
+            for c in range(0, len(currencies)):
+                quote = currencies[c]
+                quoteId = quote.lower()
                 base = market['symbol']
                 baseId = market['id']
-                quote = self.currencies[c]
-                quoteId = quote.lower()
                 symbol = base + '/' + quote
                 id = baseId + '/' + quote
                 result.append({
@@ -10187,7 +10190,7 @@ class coinmarketcap (Exchange):
                 })
         return result
 
-    def fetchGlobal(self, currency='USD'):
+    def fetch_global(self, currency='USD'):
         self.load_markets()
         request = {}
         if currency:
@@ -10199,20 +10202,22 @@ class coinmarketcap (Exchange):
         if 'last_updated' in ticker:
             if ticker['last_updated']:
                 timestamp = int(ticker['last_updated']) * 1000
-        volume = None
-        volumeKey = '24h_volume_' + market['quoteId']
-        if volumeKey in ticker:
-            volume = float(ticker[volumeKey])
-        price = 'price_' + market['quoteId']
         change = None
         changeKey = 'percent_change_24h'
         if changeKey in ticker:
             change = float(ticker[changeKey])
         last = None
-        if price in ticker:
-            if ticker[price]:
-                last = float(ticker[price])
-        symbol = market['symbol']
+        symbol = None
+        volume = None
+        if market:
+            price = 'price_' + market['quoteId']
+            if price in ticker:
+                if ticker[price]:
+                    last = float(ticker[price])
+            symbol = market['symbol']
+            volumeKey = '24h_volume_' + market['quoteId']
+            if volumeKey in ticker:
+                volume = float(ticker[volumeKey])
         return {
             'symbol': symbol,
             'timestamp': timestamp,
@@ -10236,7 +10241,9 @@ class coinmarketcap (Exchange):
 
     def fetch_tickers(self, currency='USD', params={}):
         self.load_markets()
-        request = {}
+        request = {
+            'limit' : 10000,
+        }
         if currency:
             request['convert'] = currency
         response = self.publicGetTicker(self.extend(request, params))
@@ -10244,8 +10251,11 @@ class coinmarketcap (Exchange):
         for t in range(0, len(response)):
             ticker = response[t]
             id = ticker['id'] + '/' + currency
-            market = self.markets_by_id[id]
-            symbol = market['symbol']
+            symbol = id
+            market = None
+            if id in self.markets_by_id:
+                market = self.markets_by_id[id]
+                symbol = market['symbol']
             tickers[symbol] = self.parse_ticker(ticker, market)
         return tickers
 

@@ -87,11 +87,11 @@ class LocImpl(unohelper.Base, LOC):
         """Return Poloniex data. Mapped to PyUNO through the LOC.rdb file"""
         ticker = ticker.upper()
         #datacode = datacode.lower()
-        logger.info('getPoloniex ticker={} datacode={}'.format(ticker, datacode))
+        logger.info('getPoloniex: ticker={} datacode={}'.format(ticker, datacode))
         try:
             polo = Poloniex()
             result = float(polo.returnTicker()[ticker][datacode])
-            logger.info('getPoloniex result={:.8f}'.format(result))
+            logger.info('getPoloniex: result={:.8f}'.format(result))
         except:
             result = 'Something bad happened'
         return result
@@ -287,13 +287,46 @@ class LocImpl(unohelper.Base, LOC):
                     xchng = yunbi()
                 elif exchng == 'zaif':
                     xchng = zaif()
-                markets = xchng.load_markets()
-                if ticker in xchng.symbols: 
-                    result = xchng.fetch_ticker(ticker)[datacode]
-                    logger.info('ccxt {} {} {}={:.8f}'.format(exchng, ticker, datacode, result))
+
+                if exchng == 'coinmarketcap':
+                    if ticker == 'GLOBAL':
+                        g = xchng.fetch_global()
+                        if datacode == 'market_cap':
+                            result = float(g['total_market_cap_usd'])
+                        elif datacode == 'dominance':
+                            result = float(g['bitcoin_percentage_of_market_cap'])
+                        else:
+                            result = 'Request market_cap or dominance with GLOBAL'
+                        logger.info('ccxt: {} GLOBAL {} = {}'.format(exchng, datacode, result))
+                    else:
+                        t = xchng.fetch_ticker(ticker + '/USD')
+                        result = float(t['info'][datacode])
+                        logger.info('ccxt: {} {} {} = {}'.format(exchng, ticker, datacode, result))
+                    # end of coinmarketcap
+                elif exchng in ('gatecoin', 'lakebtc', 'livecoin', 'poloniex', 'therock'):
+                    markets = xchng.load_markets()
+                    if ticker == 'RELOAD':
+                        markets = xchng.load_markets(True)
+                        result = 'Reloaded all tickers for ' + exchng
+                        logger.info('ccxt: {}'.format(result))
+                    elif ticker in xchng.symbols:
+                        result = float(markets[ticker]['info'][datacode])
+                        logger.info('ccxt: {} {} {}={:.8f}'.format(exchng, ticker, datacode, result))
+                    else:
+                        result = 'Unknown ' + exchng + ' pair: ' + ticker
+                        logger.info('ccxt: {}'.format(result))
+                    # end of exchanges with cached results
                 else:
-                    result = 'Unknown ' + exchng + ' pair: ' + ticker
-                    logger.error('ccxt: {}'.format(result))
+                    # no caching here
+                    markets = xchng.load_markets()
+                    if ticker in xchng.symbols: 
+                        result = xchng.fetch_ticker(ticker)[datacode]
+                        logger.info('ccxt: {} {} {}={:.8f}'.format(exchng, ticker, datacode, result))
+                    else:
+                        result = 'Unknown ' + exchng + ' pair: ' + ticker
+                        logger.error('ccxt: {}'.format(result))
+                    # end of uncached exchanges
+                # end of supported exchanges 
             else:
                 result = 'Unsupported exchange: ' + exchng
                 logger.error('ccxt: {}'.format(result))
