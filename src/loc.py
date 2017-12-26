@@ -346,7 +346,11 @@ class LocImpl(unohelper.Base, LOC):
                     xchng = zaif()
 
                 if exchng == 'coinmarketcap':
-                    if ticker == 'GLOBAL':
+                    if ticker == 'RELOAD':
+                        markets = xchng.load_markets(True)
+                        result = 'Reloaded all tickers for ' + exchng
+                        logger.info('ccxt: {}'.format(result))
+                    elif ticker == 'GLOBAL':
                         g = xchng.fetch_global()
                         if datacode == 'market_cap':
                             result = float(g['total_market_cap_usd'])
@@ -356,9 +360,23 @@ class LocImpl(unohelper.Base, LOC):
                             result = 'Request market_cap or dominance with GLOBAL'
                         logger.info('ccxt: {} GLOBAL {} = {}'.format(exchng, datacode, result))
                     else:
-                        t = xchng.fetch_ticker(ticker + '/USD')
-                        result = float(t['info'][datacode])
-                        logger.info('ccxt: {} {} {} = {}'.format(exchng, ticker, datacode, result))
+                        markets = xchng.markets
+                        if markets == None:
+                            markets = xchng.load_markets()
+                        if ticker in xchng.symbols:
+                            if datacode == 'rank':
+                                result=markets[ticker]['info']['rank']
+                                logger.info('ccxt: {} {} rank = {}'.format(exchng, ticker, result))
+                            elif datacode == 'market_cap':
+                                result=markets[ticker]['info']['market_cap_usd']
+                                logger.info('ccxt: {} {} market_cap_usd = {}'.format(exchng, ticker, result))
+                            else:
+                                t = xchng.fetch_ticker(ticker)
+                                result = float(t[datacode])
+                                logger.info('ccxt: {} {} {} = {:.8f}'.format(exchng, ticker, datacode, result))
+                        else:
+                            result = 'Unknown ' + exchng + ' pair: ' + ticker
+                            logger.info('ccxt: {}'.format(result))
                     # end of coinmarketcap
                 elif exchng in caching:
                     markets = xchng.markets
