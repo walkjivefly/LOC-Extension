@@ -34,17 +34,17 @@ Ticker is a currency pair from the ccxt unified API.
 
 Datacode is one of the ccxt supported data items for the fetch_ticker function. The one you'll probably use most is "last" 
 
-v0.2.3 introduces caching for some of the ccxt supported exchanges. This relies on the ccxt load_markets() function downloading data for every ticker combination supported by the exchange. The cached information is then used for every subsequent lookup for that exchange. If you're pulling the prices for many tickers and you have a slow internet connection this provides a very substantial, very worthwhile, performance improvementi after the first fetch. 
+v0.2.3 introduces caching for some of the ccxt supported exchanges. This relies on the ccxt load_markets() function downloading data for every ticker combination supported by the exchange. The cached information is then used for every subsequent lookup for that exchange. If you're pulling the prices for many tickers and you have a slow internet connection this provides a very substantial, very worthwhile, performance improvement after the first fetch. 
 
 The exchanges which provide caching are bitmex, gatecoin, lakebtc, livecoin, luno, nova, poloniex, qryptos, quoine, therock and vaultoro.
 
 #### Coinmarketcap
 
-Coinmarketcap is supported by ccxt but it is not a regular exchange; it is an aggregator. It works slightly differently to a regular exchange. It doesn't provide coin/coin tickers. Instead, it provides coin/fiat tickers for 15 supported fiat currencies (AUD, BRL, CAD, CHF, CNY, EUR, GBP, HKD, IDR, INR, JPY, KRW, MXN, RUB, and USD). In addition it provides some special data like total market cap in USD and bitcoin percentage dominance. These are accessed using a special ticker, "GLOBAL" and datacode items "market_cap" and "dominance". Further, there are 2 special data items for each coin: market cap in USD, and rank. These are accessed from the coin/USD ticker with datacodes "market_cap" and "rank".
+Coinmarketcap is supported by ccxt but it is not a regular exchange; it is an aggregator. It works slightly differently to a regular exchange. It doesn't provide coin/coin tickers. Instead, it provides coin/fiat tickers for 15 supported fiat currencies (AUD, BRL, CAD, CHF, CNY, EUR, GBP, HKD, IDR, INR, JPY, KRW, MXN, RUB, and USD). In addition it provides some special data like total market cap in USD and bitcoin crypto-currency market percentage dominance. These are accessed using a special ticker, "GLOBAL", and datacode items "market_cap" and "dominance". Further, there are 2 special data items for each coin: market cap in USD, and rank. These are accessed from the coin/USD ticker with datacodes "market_cap" and "rank".
 
 ### Windows users
 
-At the present time v0.2.2 is the only version recommended for Windows users. This is because some have experienced problems installing v0.2.0. LOC-Extension includes some logging which worked on the test Windows (7) machine I had access to but which is incompatible with (at least some) other machines. I do not currently have access to a Windows (any version) machine for testing.
+At the present time v[0.2.2](https://github.com/walkjivefly/LOC-Extension/tree/v0.2.2) is the only version recommended for Windows users. This is because some have experienced problems installing v0.2.0. LOC-Extension includes some logging which worked on the test Windows (7) machine I had access to but which is incompatible with (at least some) other machines. I do not currently have access to a Windows (any version) machine for testing.
 
 Windows users are **STRONGLY** recommended to make a system snapshot before installing this or any other LibreOffice extension. Then when it goes horribly wrong you'll have a much simpler time recovering.
  
