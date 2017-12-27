@@ -50,7 +50,11 @@ Windows users are **STRONGLY** recommended to make a system snapshot before inst
  
 ### Upgrading
 
-The LibreOffice extension mechanism is poorly documented and extremely fragile. It is **STRONGLY** recommended that you remove the previous version of LOC-Extension before adding this one. If you use the replace option you might or might not end up with indecipherable error messages or an unusable extension. If you really screw things up I recommend closing LibreOffice, renaming the entire customisation directory (~/.config/libreoffice/4 on linux), restarting LibreOffice and re-installing (all) your extensions. 
+The LibreOffice extension mechanism is poorly documented and extremely fragile. It is **STRONGLY** recommended that you remove the previous version of LOC-Extension before adding this one. If you use the replace option you might or might not end up with indecipherable error messages or an unusable extension. 
+
+LibreOffice does not handle extension files with spaces in the names well. The spaces usually end up being there because your browser renames files to things like "LOC (1).oxt" if there is already a (previous) version in your download directory. If you attempt to install/upgrade using such a file the process will fail and leave the extension in an inconsistent state: it won't appear in the installed extensions list but if you try to install the same version again it will say it is already installed. Take care to remove previous downloads before downloading the latest extension, or to rename it after downloading and remove any spaces from the filename. See bug [114708](https://bugs.documentfoundation.org/show_bug.cgi?id=114708)
+
+If you/LibreOffice really screw things up I recommend closing LibreOffice, renaming the entire customisation directory (~/.config/libreoffice/4 on linux), restarting it and re-installing (all) your extensions. 
 
 Recovering from a messed-up extension installation/upgrade is much harder for Windows users. Really, make a system snapshot before installing or upgrading any LibreOffice extension. 
 
