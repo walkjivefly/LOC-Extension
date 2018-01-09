@@ -1831,6 +1831,8 @@ class binance (Exchange):
                 'QSP/BTC': {'id': 'QSPBTC', 'symbol': 'QSP/BTC', 'base': 'QSP', 'quote': 'BTC', 'lot': 1, 'limits': {'amount': {'min': 1, 'max': None}, 'price': {'min': 0.00000001, 'max': None}, 'cost': {'min': 0.001, 'max': None}}},
                 'QSP/ETH': {'id': 'QSPETH', 'symbol': 'QSP/ETH', 'base': 'QSP', 'quote': 'ETH', 'lot': 1, 'limits': {'amount': {'min': 1, 'max': None}, 'price': {'min': 0.00000001, 'max': None}, 'cost': {'min': 0.001, 'max': None}}},
                 'QSP/BNB': {'id': 'QSPBNB', 'symbol': 'QSP/BNB', 'base': 'QSP', 'quote': 'BNB', 'lot': 1, 'limits': {'amount': {'min': 1, 'max': None}, 'price': {'min': 0.00000001, 'max': None}, 'cost': {'min': 0.001, 'max': None}}},
+                'ELF/BTC': {'id': 'ELFBTC', 'symbol': 'ELF/BTC', 'base': 'ELF', 'quote': 'BTC', 'lot': 1, 'limits': {'amount': {'min': 1, 'max': None}, 'price': {'min': 0.00000001, 'max': None}, 'cost': {'min': 0.001, 'max': None}}},
+                'ELF/ETH': {'id': 'ELFETH', 'symbol': 'ELF/ETH', 'base': 'ELF', 'quote': 'ETH', 'lot': 1, 'limits': {'amount': {'min': 1, 'max': None}, 'price': {'min': 0.00000001, 'max': None}, 'cost': {'min': 0.001, 'max': None}}},
             },
         }
         params.update(config)
