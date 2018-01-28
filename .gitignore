@@ -1,4 +1,5 @@
 /setpath
+/LOC
 /LOC.oxt
 /LOC.png
 /LOC/description-en-US.txt
@@ -8,6 +9,7 @@
 /LOC/XLoc.rdb
 /LOC/META-INF
 /LOC/META-INF/manifest.xml
+/src/__pycache__
 /src/__pycache__/loc.cpython-35.pyc
 /src/__pycache__/loctest.cpython-35.pyc
 /examples/.~lock.PoloniexExample.ods#
