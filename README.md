@@ -32,15 +32,19 @@ Exchange is any exchange name supported by the embedded ccxt snapshot (version 1
 Ticker is a currency pair from the ccxt unified API.
 **NOTE**: The format of the ticker is different from that for GETPOLONIEX(). The valid values depend on the exchange being addressed.
 
-Datacode is one of the ccxt supported data items for the fetch_ticker function. The one you'll probably use most is "last" 
+Datacode is one of the ccxt supported data items for the fetch_ticker function. The one you'll probably use most is "last".
+
+### Performance 
 
 v0.2.3 introduces caching for some of the ccxt supported exchanges. This relies on the ccxt load_markets() function downloading data for every ticker combination supported by the exchange. The cached information is then used for every subsequent lookup for that exchange. If you're pulling the prices for many tickers and you have a slow internet connection this provides a very substantial, very worthwhile, performance improvement after the first fetch. 
 
-The exchanges which provide caching are bitmex, gatecoin, lakebtc, livecoin, luno, nova, poloniex, qryptos, quoine, therock and vaultoro.
+The exchanges which provide caching are bitmex, coinmarketcap, gatecoin, lakebtc, livecoin, luno, nova, poloniex, qryptos, quoine, therock and vaultoro.
 
-#### Coinmarketcap
+If you bought coins from, or store coins on (NOT recommnded), multiple exchanges and you have less than stellar internet performance you might want to consider getting price information from a single caching exchange if it carries all your coins. If no one caching exchange carries all of your coins then consider getting data from CoinmarketCap if performance is more important than up to the minute accuracy.
 
-Coinmarketcap is supported by ccxt but it is not a regular exchange; it is an aggregator. It works slightly differently to a regular exchange. It doesn't provide coin/coin tickers. Instead, it provides coin/fiat tickers for 15 supported fiat currencies (AUD, BRL, CAD, CHF, CNY, EUR, GBP, HKD, IDR, INR, JPY, KRW, MXN, RUB, and USD). In addition it provides some special data like total market cap in USD and bitcoin crypto-currency market percentage dominance. These are accessed using a special ticker, "GLOBAL", and datacode items "market_cap" and "dominance". Further, there are 2 special data items for each coin: market cap in USD, and rank. These are accessed from the coin/USD ticker with datacodes "market_cap" and "rank".
+### Coinmarketcap
+
+Coinmarketcap is supported by ccxt but it is not a regular exchange; it is an aggregator. It works slightly differently to a regular exchange. It doesn't provide coin/coin tickers. Instead, it provides coin/fiat tickers for 15 supported fiat currencies (AUD, BRL, CAD, CHF, CNY, EUR, GBP, HKD, IDR, INR, JPY, KRW, MXN, RUB, and USD). In addition it provides some special data like total market cap in USD and bitcoin crypto-currency market percentage dominance. These are accessed using a special ticker, "GLOBAL", and datacode items "market_cap" and "dominance". Further, there are 2 special data items for each coin: market cap in USD, and rank. These are accessed from the coin/USD ticker with datacodes "market_cap_usd" and "rank". Since the data is aggregated from multiple exchanges and not real-time this is one of the sources which uses caching. If you just want a reasonable approximation of the current value of each coin in your portfolio then coinmarketcap is the quickest way to get it via the LOC-Extension.
 
 ### Windows users
 
@@ -90,6 +94,14 @@ There is **NO** warranty of any kind. You use the software entirely at your own 
 ### Other Contributors and Thanks!
 * madsailor - provided the original SMF Extension that LOC is based on
 * Igor Kroitor - actively maintains the [ccxt](https://github.com/ccxt/ccxt) library
+
+### Donate
+
+If you find the extension useful and feel like throwing some coins my way, please use one of these addresses:
+
+BTC: 1Q6rzThika7CW5gi62yx8STAruobS6e7ZW
+ETH: 0x7d7B9554De50823C94815BaEbdB1Aa19c79f0325
+LTC: LYokWz9fyqaAho4tkBabwAWNvUvZGiiMLa
 
 [GIT:release]: http://github.com/walkjivefly/LOC-Extension/releases/latest
 [License:3.0]: http://www.gnu.org/licenses/lgpl.html
