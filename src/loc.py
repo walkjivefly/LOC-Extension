@@ -364,16 +364,8 @@ class LocImpl(unohelper.Base, LOC):
                         if markets == None:
                             markets = xchng.load_markets()
                         if ticker in xchng.symbols:
-                            if datacode == 'rank':
-                                result=float(markets[ticker]['info']['rank'])
-                                logger.info('ccxt: {} {} rank = {}'.format(exchng, ticker, result))
-                            elif datacode == 'market_cap':
-                                result=float(markets[ticker]['info']['market_cap_usd'])
-                                logger.info('ccxt: {} {} market_cap_usd = {}'.format(exchng, ticker, result))
-                            else:
-                                t = xchng.fetch_ticker(ticker)
-                                result = float(t[datacode])
-                                logger.info('ccxt: {} {} {} = {:.8f}'.format(exchng, ticker, datacode, result))
+                            result=float(markets[ticker]['info'][datacode])
+                            logger.info('ccxt: {} {} {} = {}'.format(exchng, ticker, datacode, result))
                         else:
                             result = 'Unknown ' + exchng + ' pair: ' + ticker
                             logger.info('ccxt: {}'.format(result))
