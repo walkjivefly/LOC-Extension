@@ -99,9 +99,9 @@ There is **NO** warranty of any kind. You use the software entirely at your own 
 
 If you find the extension useful and feel like throwing some coins my way, please use one of these addresses:
 
-BTC: 1Q6rzThika7CW5gi62yx8STAruobS6e7ZW
-ETH: 0x7d7B9554De50823C94815BaEbdB1Aa19c79f0325
-LTC: LYokWz9fyqaAho4tkBabwAWNvUvZGiiMLa
+* BTC: 1Q6rzThika7CW5gi62yx8STAruobS6e7ZW
+* ETH: 0x7d7B9554De50823C94815BaEbdB1Aa19c79f0325
+* LTC: LYokWz9fyqaAho4tkBabwAWNvUvZGiiMLa
 
 [GIT:release]: http://github.com/walkjivefly/LOC-Extension/releases/latest
 [License:3.0]: http://www.gnu.org/licenses/lgpl.html
