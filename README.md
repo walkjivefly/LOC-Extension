@@ -30,7 +30,7 @@ CCXT(Exchange, Ticker, Datacode)
 Exchange is any exchange name supported by the embedded ccxt snapshot (version 1.9.262). Quotes **must** be used according to the same rules as for GETPOLONIEX().
 
 Ticker is a currency pair from the ccxt unified API.
-**NOTE**: The format of the ticker is different from that for GETPOLONIEX(). The valid values depend on the exchange being addressed.
+**NOTE**: The format of the ticker is different from that for GETPOLONIEX(). The valid values depend on the exchange being addressed. They are generally coin/coin, eg: ETH/BTC when buying/selling ETH and paying/getting paid in BTC.
 
 Datacode is one of the ccxt supported data items for the fetch_ticker function. The one you'll probably use most is "last".
 
@@ -40,11 +40,11 @@ v0.2.3 introduces caching for some of the ccxt supported exchanges. This relies 
 
 The exchanges which provide caching are bitmex, coinmarketcap, gatecoin, lakebtc, livecoin, luno, nova, poloniex, qryptos, quoine, therock and vaultoro.
 
-If you bought coins from, or store coins on (NOT recommnded), multiple exchanges and you have less than stellar internet performance you might want to consider getting price information from a single caching exchange if it carries all your coins. If no one caching exchange carries all of your coins then consider getting data from CoinmarketCap if performance is more important than up to the minute accuracy.
+If you bought coins from, or store coins on (NOT recommnded), multiple exchanges and you have less than stellar internet performance you might want to consider getting price information from a single caching exchange if it carries all of your coins. If no one caching exchange carries all of your coins then consider getting data from Coinmarketcap if performance is more important than up to the minute accuracy.
 
 ### Coinmarketcap
 
-Coinmarketcap is supported by ccxt but it is not a regular exchange; it is an aggregator. It works slightly differently to a regular exchange. It doesn't provide coin/coin tickers. Instead, it provides coin/fiat tickers for 15 supported fiat currencies (AUD, BRL, CAD, CHF, CNY, EUR, GBP, HKD, IDR, INR, JPY, KRW, MXN, RUB, and USD). In addition it provides some special data like total market cap in USD and bitcoin crypto-currency market percentage dominance. These are accessed using a special ticker, "GLOBAL", and datacode items "market_cap" and "dominance". Further, there are 2 special data items for each coin: market cap in USD, and rank. These are accessed from the coin/USD ticker with datacodes "market_cap_usd" and "rank". Since the data is aggregated from multiple exchanges and not real-time this is one of the sources which uses caching. If you just want a reasonable approximation of the current value of each coin in your portfolio then coinmarketcap is the quickest way to get it via the LOC-Extension.
+Coinmarketcap is supported by ccxt but it is not a regular exchange; it is an aggregator. It works slightly differently to a regular exchange. It doesn't provide coin/coin tickers. Instead, it provides coin/fiat tickers for 15 supported fiat currencies (AUD, BRL, CAD, CHF, CNY, EUR, GBP, HKD, IDR, INR, JPY, KRW, MXN, RUB, and USD). In addition it provides some special data like total market cap in USD and bitcoin crypto-currency market percentage dominance. These are accessed using a special ticker, "GLOBAL", and datacode items "market_cap" and "dominance". Further, there are 2 special data items for each coin: market cap in USD, and rank. These are accessed from the coin/USD ticker with datacodes "market_cap_usd" and "rank". Since the data is aggregated from multiple exchanges and not real-time this is one of the sources which uses caching. If you just want a reasonable approximation of the current value of each coin in your portfolio then coinmarketcap is the quickest way to get it via the LOC-Extension. **Coinmarketcap is a bit of a work-in-progress and right now returns cached data from the markets info field, the contents and labels of which are not the same as in the fetch_ticker() function. So right now instead of using "last" for the price it is necessary to use "price_btc" or "price_usd".**
 
 ### Windows users
 
