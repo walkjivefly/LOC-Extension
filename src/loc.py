@@ -89,8 +89,27 @@ class LocImpl(unohelper.Base, LOC):
     def __init__( self, ctx ):
         self.ctx = ctx
         logger.info('========== New call ==========')
+#        logger.info('running ' + sys.version)
+#        logger.info('from ' + sys.executable)
+#        logger.info('with path ' + sys.path)
+#        logger.info('and environment:')
+#        for x in os.environ:
+#            logger.info(x + "=" + os.environ[x])
+#        logger.info('cwd:'+os.getcwd())
         # this is a nasty hack for an OpenSSL problem, the details of which I don't begin to understand.
         ssl._create_default_https_context = ssl._create_unverified_context
+
+    def runCommand( self, command ):
+        """Run a command"""
+        logger.info('runCommand attempting ' + command)
+        try:
+            result = os.popen(command).read().rstrip()
+            logger.info('result=' + result)
+        except:
+            logger.error('runCommand: exception {}'.format(sys.exc_info()[0]))
+            result = 'Exception encountered'
+        return result
+
 
     def getPoloniex( self, ticker, datacode='last' ):
         """Return Poloniex data. Mapped to PyUNO through the LOC.rdb file"""

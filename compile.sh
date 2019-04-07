@@ -1,14 +1,14 @@
 #!/bin/bash
 
 #Import tools for compiling extension binaries
-export PATH=$PATH:/opt/libreoffice5.3/sdk/bin/
+#export PATH=$PATH:/opt/libreoffice5.3/sdk/bin/
 
 #Setup directories 
-mkdir "${PWD}"/LOC/
-mkdir "${PWD}"/LOC/META-INF/
+mkdir -p "${PWD}"/LOC/
+mkdir -p "${PWD}"/LOC/META-INF/
 
 #Compile the binaries
-idlc -I /opt/libreoffice5.3/sdk/idl "${PWD}"/idl/LOC.idl
+idlc -I /usr/lib/libreoffice/sdk/idl "${PWD}"/idl/LOC.idl
 regmerge -v "${PWD}"/LOC/LOC.rdb UCR "${PWD}"/idl/LOC.urd
 rm "${PWD}"/idl/LOC.urd
 

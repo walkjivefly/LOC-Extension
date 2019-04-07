@@ -1,1 +1,1 @@
-The LOC Extension enables you to create spreadsheets with crypto currency market data pulled directly from the web. This version directly supports Poloniex and additionally, all of the datasources supported by ccxt version 1.9.262
+The LOC Extension enables you to create spreadsheets with crypto currency market data pulled directly from the web. This version (v0.3.0) directly supports Poloniex and additionally, all of the datasources supported by whichever version of ccxt you have installed.

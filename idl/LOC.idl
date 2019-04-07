@@ -4,6 +4,7 @@ module com { module loc { module crypto { module getinfo {
 
     interface LOC
     {
+      any runCommand( [in] string a);
       // Modeled as an 'any' to allow it to be NULL/None/Missing.
       any getPoloniex( [in] string a, [in] any b );
       // Expecting parms to be exchange and function.
