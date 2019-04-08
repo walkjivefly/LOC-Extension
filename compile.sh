@@ -14,10 +14,10 @@ rm "${PWD}"/idl/LOC.urd
 
 #Copy extension files and generate metadata
 cp -f "${PWD}"/src/loc.py "${PWD}"/LOC/
-cp -f "${PWD}"/src/errors.py "${PWD}"/LOC/
-cp -f "${PWD}"/src/exchange.py "${PWD}"/LOC/
-cp -f "${PWD}"/src/exchanges.py "${PWD}"/LOC/
-cp -f "${PWD}"/src/version.py "${PWD}"/LOC/
+#cp -f "${PWD}"/src/errors.py "${PWD}"/LOC/
+#cp -f "${PWD}"/src/exchange.py "${PWD}"/LOC/
+#cp -f "${PWD}"/src/exchanges.py "${PWD}"/LOC/
+#cp -f "${PWD}"/src/version.py "${PWD}"/LOC/
 cp -f "${PWD}"/src/description-en-US.txt "${PWD}"/LOC/
 python "${PWD}"/src/generate_metainfo.py
 

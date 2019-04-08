@@ -1,6 +1,6 @@
 #  loctest.py - Test LOC functions through the Python console
 #
-#  Copyright (c) 2017 Mark Brooker (mark@walkjivefly.com)
+#  Copyright (c) 2017-2019 Mark Brooker (mark@walkjivefly.com)
 #
 #  license: GNU LGPL
 #
@@ -15,7 +15,7 @@ import os
 import inspect
 import getopt
 #Add path to LO/OO components.
-sys.path.append('/opt/libreoffice5.3/program')
+#sys.path.append('/opt/libreoffice5.3/program')
 
 # Add current directory to path to import loc module
 cmd_folder = os.path.realpath(os.path.abspath
@@ -57,6 +57,8 @@ def main(argv):
         loc_test(main_loc, arg_ticker, arg_datacode)
     elif arg_funct == 'ccxt':
         loc_test2(main_loc, arg_exchange, arg_ticker, arg_datacode)
+    elif arg_funct == 'cb':
+        loc_test3(main_loc, arg_ticker, arg_datacode)
     else:
         usage(0)
 
@@ -67,6 +69,11 @@ def loc_test(loc_py, ticker, datacode):
     
 def loc_test2(loc_py, exchange, ticker, datacode):
     result = loc_py.ccxt(exchange, ticker, datacode)
+    print (result)
+    sys.exit()
+    
+def loc_test3(loc_py, ticker, datacode):
+    result = loc_py.getCryptoBridge(ticker, datacode)
     print (result)
     sys.exit()
     

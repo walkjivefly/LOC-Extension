@@ -1,6 +1,6 @@
 #  loc.py - Pyuno/LO bridge to implement new functions for LibreOffice calc
 #
-#  Copyright (c) 2017 Mark Brooker (mark@walkjivefly.com)
+#  Copyright (c) 2017-2019 Mark Brooker (mark@walkjivefly.com)
 #
 #  license: GNU LGPL
 #
@@ -19,16 +19,7 @@ import sys
 import os
 import inspect
 import logging
-
-# Add current directory to path to import ccxt modules
-cmd_folder = os.path.realpath(os.path.abspath
-                              (os.path.split(inspect.getfile
-                                             ( inspect.currentframe() ))[0]))
-if cmd_folder not in sys.path:
-    sys.path.insert(0, cmd_folder)
-
-from exchange import *  # noqa: F403
-from exchanges import * # noqa: F403
+import ccxt as ikccxt
 
 # Create Logger
 logger = logging.getLogger()
@@ -36,7 +27,7 @@ logger.setLevel(logging.DEBUG)
 # Create file handler and set level to debug
 logfile = '/tmp/LOC_' + str(os.getpid())
 fh = logging.FileHandler(logfile, mode='a', encoding=None, delay=False)
-fh.setLevel(logging.DEBUG)
+fh.setLevel(logging.INFO)
 # Create formatter
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 # Add formatter to handlers
@@ -45,14 +36,27 @@ fh.setFormatter(formatter)
 logger.addHandler(fh)
 
 # ccxt function handles
-handles = {}
-for x in exchanges:
-    handles[x] = None
+#handles = {}
+#for x in exchanges:
+#    handles[x] = None
 
 # ccxt exchanges with caching
-caching = ['bitmex', 'coinmarketcap', 'gatecoin', 'lakebtc', 'livecoin',
-           'luno', 'nova', 'poloniex', 'qryptos', 'quoine', 'therock',
-           'vaultoro']
+#caching = ['bitmex', 'coinmarketcap', 'gatecoin', 'lakebtc', 'livecoin',
+#           'luno', 'nova', 'poloniex', 'qryptos', 'quoine', 'therock',
+#           'vaultoro']
+
+class CryptoBridge():
+    def __init__(self):
+        pass
+    def api_query(self, command, ticker):
+        if(command == 'returnTicker'):
+            ret = urlopen(Request('https://api.crypto-bridge.org/api/v1/ticker/' + ticker))
+            return json.loads(ret.read().decode('utf8'))
+        else:
+            return 'Unknown request'
+    def returnTicker(self, ticker):
+        return self.api_query('returnTicker', ticker)
+
 
 class Poloniex():
     def __init__(self):
@@ -89,15 +93,12 @@ class LocImpl(unohelper.Base, LOC):
     def __init__( self, ctx ):
         self.ctx = ctx
         logger.info('========== New call ==========')
-#        logger.info('running ' + sys.version)
-#        logger.info('from ' + sys.executable)
-#        logger.info('with path ' + sys.path)
-#        logger.info('and environment:')
-#        for x in os.environ:
-#            logger.info(x + "=" + os.environ[x])
-#        logger.info('cwd:'+os.getcwd())
         # this is a nasty hack for an OpenSSL problem, the details of which I don't begin to understand.
         ssl._create_default_https_context = ssl._create_unverified_context
+        exchanges = {}
+        for id in ikccxt.exchanges:
+            exchange = getattr(ikccxt, id)
+            exchanges[id] = exchange()
 
     def runCommand( self, command ):
         """Run a command"""
@@ -110,6 +111,19 @@ class LocImpl(unohelper.Base, LOC):
             result = 'Exception encountered'
         return result
 
+
+    def getCryptoBridge( self, ticker, datacode='last' ):
+        """Return CryptoBridge data. Mapped to PyUNO through the LOC.rdb file"""
+        ticker = ticker.upper()
+        datacode = datacode.lower()
+        logger.info('getCryptoBridge: ticker={} datacode={}'.format(ticker, datacode))
+        try:
+            CB = CryptoBridge()
+            result = float(CB.returnTicker(ticker)[datacode])
+            logger.info('getCryptoBridge: result={:.8f}'.format(result))
+        except:
+            result = 'Something bad happened'
+        return result
 
     def getPoloniex( self, ticker, datacode='last' ):
         """Return Poloniex data. Mapped to PyUNO through the LOC.rdb file"""
@@ -132,292 +146,19 @@ class LocImpl(unohelper.Base, LOC):
         result = ''
         logger.info('ccxt: exchange={} ticker={} datacode={}'.format(exchng, ticker, datacode))
         try:
-            if exchng in exchanges:
-                if exchng == '_1broker':
-                    xchng = _1broker()
-                elif exchng == '_1btcxe':
-                    xchng = _1btcxe()
-                elif exchng == 'acx':
-                    xchng = acx()
-                elif exchng == 'allcoin':
-                    xchng = allcoin()
-                elif exchng == 'anxpro':
-                    xchng = anxpro()
-                elif exchng == 'binance':
-                    xchng = binance()
-                elif exchng == 'bit2c':
-                    xchng = bit2c()
-                elif exchng == 'bitbay':
-                    xchng = bitbay()
-                elif exchng == 'bitcoincoid':
-                    xchng = bitcoincoid()
-                elif exchng == 'bitfinex':
-                    xchng = bitfinex()
-                elif exchng == 'bitfinex2':
-                    xchng = bitfinex2()
-                elif exchng == 'bitflyer':
-                    xchng = bitflyer()
-                elif exchng == 'bithumb':
-                    xchng = bithumb()
-                elif exchng == 'bitlish':
-                    xchng = bitlish()
-                elif exchng == 'bitmarket':
-                    xchng = bitmarket()
-                elif exchng == 'bitmex':
-                    if handles[exchng] == None:
-                        xchng = bitmex()
-                        handles[exchng] = xchng
-                    else:
-                        xchng = handles[exchng]
-                elif exchng == 'bitso':
-                    xchng = bitso()
-                elif exchng == 'bitstamp1':
-                    xchng = bitstamp1()
-                elif exchng == 'bitstamp':
-                    xchng = bitstamp()
-                elif exchng == 'bittrex':
-                    xchng = bittrex()
-                elif exchng == 'bl3p':
-                    xchng = bl3p()
-                elif exchng == 'bleutrade':
-                    xchng = bleutrade()
-                elif exchng == 'btcbox':
-                    xchng = btcbox()
-                elif exchng == 'btcchina':
-                    xchng = btcchina()
-                elif exchng == 'btcexchange':
-                    xchng = btcexchange()
-                elif exchng == 'btcmarkets':
-                    xchng = btcmarkets()
-                elif exchng == 'btctradeua':
-                    xchng = btctradeua()
-                elif exchng == 'btcturk':
-                    xchng = btcturk()
-                elif exchng == 'btcx':
-                    xchng = btcx()
-                elif exchng == 'bter':
-                    xchng = bter()
-                elif exchng == 'bxinth':
-                    xchng = bxinth()
-                elif exchng == 'ccex':
-                    xchng = ccex()
-                elif exchng == 'cex':
-                    xchng = cex()
-                elif exchng == 'chbtc':
-                    xchng = chbtc()
-                elif exchng == 'chilebit':
-                    xchng = chilebit()
-                elif exchng == 'coincheck':
-                    xchng = coincheck()
-                elif exchng == 'coinfloor':
-                    xchng = coinfloor()
-                elif exchng == 'coingi':
-                    xchng = coingi()
-                elif exchng == 'coinmarketcap':
-                    if handles[exchng] == None:
-                        xchng = coinmarketcap()
-                        handles[exchng] = xchng
-                    else:
-                        xchng = handles[exchng]
-                elif exchng == 'coinmate':
-                    xchng = coinmate()
-                elif exchng == 'coinsecure':
-                    xchng = coinsecure()
-                elif exchng == 'coinspot':
-                    xchng = coinspot()
-                elif exchng == 'cryptopia':
-                    xchng = cryptopia()
-                elif exchng == 'dsx':
-                    xchng = dsx()
-                elif exchng == 'exmo':
-                    xchng = exmo()
-                elif exchng == 'flowbtc':
-                    xchng = flowbtc()
-                elif exchng == 'foxbit':
-                    xchng = foxbit()
-                elif exchng == 'fybse':
-                    xchng = fybse()
-                elif exchng == 'fybsg':
-                    xchng = fybsg()
-                elif exchng == 'gatecoin':
-                    if handles[exchng] == None:
-                        xchng = gatecoin()
-                        handles[exchng] = xchng
-                    else:
-                        xchng = handles[exchng]
-                elif exchng == 'gateio':
-                    xchng = gateio()
-                elif exchng == 'gdax':
-                    xchng = gdax()
-                elif exchng == 'gemini':
-                    xchng = gemini()
-                elif exchng == 'hitbtc':
-                    xchng = hitbtc()
-                elif exchng == 'hitbtc2':
-                    xchng = hitbtc2()
-                elif exchng == 'huobi':
-                    xchng = huobi()
-                elif exchng == 'huobicny':
-                    xchng = huobicny()
-                elif exchng == 'huobipro':
-                    xchng = huobipro()
-                elif exchng == 'independentreserve':
-                    xchng = independentreserve()
-                elif exchng == 'itbit':
-                    xchng = itbit()
-                elif exchng == 'jubi':
-                    xchng = jubi()
-                elif exchng == 'kraken':
-                    xchng = kraken()
-                elif exchng == 'kuna':
-                    xchng = kuna()
-                elif exchng == 'lakebtc':
-                    if handles[exchng] == None:
-                        xchng = lakebtc()
-                        handles[exchng] = xchng
-                    else:
-                        xchng = handles[exchng]
-                elif exchng == 'livecoin':
-                    if handles[exchng] == None:
-                        xchng = livecoin()
-                        handles[exchng] = xchng
-                    else:
-                        xchng = handles[exchng]
-                elif exchng == 'liqui':
-                    xchng = liqui()
-                elif exchng == 'luno':
-                    if handles[exchng] == None:
-                        xchng = luno()
-                        handles[exchng] = xchng
-                    else:
-                        xchng = handles[exchng]
-                elif exchng == 'mercado':
-                    xchng = mercado()
-                elif exchng == 'mixcoins':
-                    xchng = mixcoins()
-                elif exchng == 'nova':
-                    if handles[exchng] == None:
-                        xchng = nova()
-                        handles[exchng] = xchng
-                    else:
-                        xchng = handles[exchng]
-                elif exchng == 'okcoincny':
-                    xchng = okcoincny()
-                elif exchng == 'okcoinusd':
-                    xchng = okcoinusd()
-                elif exchng == 'okex':
-                    xchng = okex()
-                elif exchng == 'paymium':
-                    xchng = paymium()
-                elif exchng == 'poloniex':
-                    if handles[exchng] == None:
-                        xchng = poloniex()
-                        handles[exchng] = xchng
-                    else:
-                        xchng = handles[exchng]
-                elif exchng == 'quadrigacx':
-                    xchng = quadrigacx()
-                elif exchng == 'qryptos':
-                    if handles[exchng] == None:
-                        xchng = qryptos()
-                        handles[exchng] = xchng
-                    else:
-                        xchng = handles[exchng]
-                elif exchng == 'quoine':
-                    if handles[exchng] == None:
-                        xchng = quoine()
-                        handles[exchng] = xchng
-                    else:
-                        xchng = handles[exchng]
-                elif exchng == 'southxchange':
-                    xchng = southxchange()
-                elif exchng == 'surbitcoin':
-                    xchng = surbitcoin()
-                elif exchng == 'tidex':
-                    xchng = tidex()
-                elif exchng == 'therock':
-                    if handles[exchng] == None:
-                        xchng = therock()
-                        handles[exchng] = xchng
-                    else:
-                        xchng = handles[exchng]
-                elif exchng == 'urdubit':
-                    xchng = urdubit()
-                elif exchng == 'vaultoro':
-                    if handles[exchng] == None:
-                        xchng = vaultoro()
-                        handles[exchng] = xchng
-                    else:
-                        xchng = handles[exchng]
-                elif exchng == 'vbtc':
-                    xchng = vbtc()
-                elif exchng == 'virwox':
-                    xchng = virwox()
-                elif exchng == 'wex':
-                    xchng = wex()
-                elif exchng == 'xbtce':
-                    xchng = xbtce()
-                elif exchng == 'yobit':
-                    xchng = yobit()
-                elif exchng == 'yunbi':
-                    xchng = yunbi()
-                elif exchng == 'zaif':
-                    xchng = zaif()
-
-                if exchng == 'coinmarketcap':
-                    if ticker == 'RELOAD':
-                        markets = xchng.load_markets(True)
-                        result = 'Reloaded all tickers for ' + exchng
-                        logger.info('ccxt: {}'.format(result))
-                    elif ticker == 'GLOBAL':
-                        g = xchng.fetch_global()
-                        if datacode == 'market_cap':
-                            result = float(g['total_market_cap_usd'])
-                        elif datacode == 'dominance':
-                            result = float(g['bitcoin_percentage_of_market_cap'])
-                        else:
-                            result = 'Request market_cap or dominance with GLOBAL'
-                        logger.info('ccxt: {} GLOBAL {} = {}'.format(exchng, datacode, result))
-                    else:
-                        markets = xchng.markets
-                        if markets == None:
-                            markets = xchng.load_markets()
-                        if ticker in xchng.symbols:
-                            result=float(markets[ticker]['info'][datacode])
-                            logger.info('ccxt: {} {} {} = {}'.format(exchng, ticker, datacode, result))
-                        else:
-                            result = 'Unknown ' + exchng + ' pair: ' + ticker
-                            logger.info('ccxt: {}'.format(result))
-                    # end of coinmarketcap
-                elif exchng in caching:
-                    markets = xchng.markets
-                    if markets == None:
-                        markets = xchng.load_markets()
-                    if ticker == 'RELOAD':
-                        markets = xchng.load_markets(True)
-                        result = 'Reloaded all tickers for ' + exchng
-                        logger.info('ccxt: {}'.format(result))
-                    elif ticker == 'NOP':
-                        result = 'Specify RELOAD to refresh cached data' 
-                        logger.info('ccxt: {}'.format(result))
-                    elif ticker in xchng.symbols:
-                        result = float(markets[ticker]['info'][datacode])
-                        logger.info('ccxt: {} {} {}={:.8f}'.format(exchng, ticker, datacode, result))
-                    else:
-                        result = 'Unknown ' + exchng + ' pair: ' + ticker
-                        logger.info('ccxt: {}'.format(result))
-                    # end of exchanges with cached results
+            # no caching for starters
+            if exchng in ikccxt.exchanges: 
+                xchng = getattr(ikccxt, exchng)
+                actual_exchange = xchng()
+                markets = actual_exchange.load_markets()
+                if ticker in actual_exchange.symbols:
+                    result = actual_exchange.fetch_ticker(ticker)[datacode]
+                    logger.info('ccxt: {} {} {}={:.8f}'.format(exchng, ticker, datacode, result))
                 else:
-                    # no caching here
-                    markets = xchng.load_markets()
-                    if ticker in xchng.symbols: 
-                        result = xchng.fetch_ticker(ticker)[datacode]
-                        logger.info('ccxt: {} {} {}={:.8f}'.format(exchng, ticker, datacode, result))
-                    else:
-                        result = 'Unknown ' + exchng + ' pair: ' + ticker
-                        logger.error('ccxt: {}'.format(result))
-                    # end of uncached exchanges
-                # end of supported exchanges 
+                    result = 'Unknown ' + exchng + ' pair: ' + ticker
+                    logger.error('ccxt: {}'.format(result))
+                # end of uncached exchanges
+            # end of supported exchanges
             else:
                 result = 'Unsupported exchange: ' + exchng
                 logger.error('ccxt: {}'.format(result))
@@ -425,6 +166,300 @@ class LocImpl(unohelper.Base, LOC):
             logger.error('ccxt: exception {}'.format(sys.exc_info()[0]))
             result = 'Exception encountered'
         return result
+
+#            if exchng in exchanges:
+#                if exchng == '_1broker':
+#                    xchng = _1broker()
+#                elif exchng == '_1btcxe':
+#                    xchng = _1btcxe()
+#                elif exchng == 'acx':
+#                    xchng = acx()
+#                elif exchng == 'allcoin':
+#                    xchng = allcoin()
+#                elif exchng == 'anxpro':
+#                    xchng = anxpro()
+#                elif exchng == 'binance':
+#                    xchng = binance()
+#                elif exchng == 'bit2c':
+#                    xchng = bit2c()
+#                elif exchng == 'bitbay':
+#                    xchng = bitbay()
+#                elif exchng == 'bitcoincoid':
+#                    xchng = bitcoincoid()
+#                elif exchng == 'bitfinex':
+#                    xchng = bitfinex()
+#                elif exchng == 'bitfinex2':
+#                    xchng = bitfinex2()
+#                elif exchng == 'bitflyer':
+#                    xchng = bitflyer()
+#                elif exchng == 'bithumb':
+#                    xchng = bithumb()
+#                elif exchng == 'bitlish':
+#                    xchng = bitlish()
+#                elif exchng == 'bitmarket':
+#                    xchng = bitmarket()
+#                elif exchng == 'bitmex':
+#                    if handles[exchng] == None:
+#                        xchng = bitmex()
+#                        handles[exchng] = xchng
+#                    else:
+#                        xchng = handles[exchng]
+#                elif exchng == 'bitso':
+#                    xchng = bitso()
+#                elif exchng == 'bitstamp1':
+#                    xchng = bitstamp1()
+#                elif exchng == 'bitstamp':
+#                    xchng = bitstamp()
+#                elif exchng == 'bittrex':
+#                    xchng = bittrex()
+#                elif exchng == 'bl3p':
+#                    xchng = bl3p()
+#                elif exchng == 'bleutrade':
+#                    xchng = bleutrade()
+#                elif exchng == 'btcbox':
+#                    xchng = btcbox()
+#                elif exchng == 'btcchina':
+#                    xchng = btcchina()
+#                elif exchng == 'btcexchange':
+#                    xchng = btcexchange()
+#                elif exchng == 'btcmarkets':
+#                    xchng = btcmarkets()
+#                elif exchng == 'btctradeua':
+#                    xchng = btctradeua()
+#                elif exchng == 'btcturk':
+#                    xchng = btcturk()
+#                elif exchng == 'btcx':
+#                    xchng = btcx()
+#                elif exchng == 'bter':
+#                    xchng = bter()
+#                elif exchng == 'bxinth':
+#                    xchng = bxinth()
+#                elif exchng == 'ccex':
+#                    xchng = ccex()
+#                elif exchng == 'cex':
+#                    xchng = cex()
+#                elif exchng == 'chbtc':
+#                    xchng = chbtc()
+#                elif exchng == 'chilebit':
+#                    xchng = chilebit()
+#                elif exchng == 'coincheck':
+#                    xchng = coincheck()
+#                elif exchng == 'coinfloor':
+#                    xchng = coinfloor()
+#                elif exchng == 'coingi':
+#                    xchng = coingi()
+#                elif exchng == 'coinmarketcap':
+#                    if handles[exchng] == None:
+#                        xchng = coinmarketcap()
+#                        handles[exchng] = xchng
+#                    else:
+#                        xchng = handles[exchng]
+#                elif exchng == 'coinmate':
+#                    xchng = coinmate()
+#                elif exchng == 'coinsecure':
+#                    xchng = coinsecure()
+#                elif exchng == 'coinspot':
+#                    xchng = coinspot()
+#                elif exchng == 'cryptopia':
+#                    xchng = cryptopia()
+#                elif exchng == 'dsx':
+#                    xchng = dsx()
+#                elif exchng == 'exmo':
+#                    xchng = exmo()
+#                elif exchng == 'flowbtc':
+#                    xchng = flowbtc()
+#                elif exchng == 'foxbit':
+#                    xchng = foxbit()
+#                elif exchng == 'fybse':
+#                    xchng = fybse()
+#                elif exchng == 'fybsg':
+#                    xchng = fybsg()
+#                elif exchng == 'gatecoin':
+#                    if handles[exchng] == None:
+#                        xchng = gatecoin()
+#                        handles[exchng] = xchng
+#                    else:
+#                        xchng = handles[exchng]
+#                elif exchng == 'gateio':
+#                    xchng = gateio()
+#                elif exchng == 'gdax':
+#                    xchng = gdax()
+#                elif exchng == 'gemini':
+#                    xchng = gemini()
+#                elif exchng == 'hitbtc':
+#                    xchng = hitbtc()
+#                elif exchng == 'hitbtc2':
+#                    xchng = hitbtc2()
+#                elif exchng == 'huobi':
+#                    xchng = huobi()
+#                elif exchng == 'huobicny':
+#                    xchng = huobicny()
+#                elif exchng == 'huobipro':
+#                    xchng = huobipro()
+#                elif exchng == 'independentreserve':
+#                    xchng = independentreserve()
+#                elif exchng == 'itbit':
+#                    xchng = itbit()
+#                elif exchng == 'jubi':
+#                    xchng = jubi()
+#                elif exchng == 'kraken':
+#                    xchng = kraken()
+#                elif exchng == 'kuna':
+#                    xchng = kuna()
+#                elif exchng == 'lakebtc':
+#                    if handles[exchng] == None:
+#                        xchng = lakebtc()
+#                        handles[exchng] = xchng
+#                    else:
+#                        xchng = handles[exchng]
+#                elif exchng == 'livecoin':
+#                    if handles[exchng] == None:
+#                        xchng = livecoin()
+#                        handles[exchng] = xchng
+#                    else:
+#                        xchng = handles[exchng]
+#                elif exchng == 'liqui':
+#                    xchng = liqui()
+#                elif exchng == 'luno':
+#                    if handles[exchng] == None:
+#                        xchng = luno()
+#                        handles[exchng] = xchng
+#                    else:
+#                        xchng = handles[exchng]
+#                elif exchng == 'mercado':
+#                    xchng = mercado()
+#                elif exchng == 'mixcoins':
+#                    xchng = mixcoins()
+#                elif exchng == 'nova':
+#                    if handles[exchng] == None:
+#                        xchng = nova()
+#                        handles[exchng] = xchng
+#                    else:
+#                        xchng = handles[exchng]
+#                elif exchng == 'okcoincny':
+#                    xchng = okcoincny()
+#                elif exchng == 'okcoinusd':
+#                    xchng = okcoinusd()
+#                elif exchng == 'okex':
+#                    xchng = okex()
+#                elif exchng == 'paymium':
+#                    xchng = paymium()
+#                elif exchng == 'poloniex':
+#                    if handles[exchng] == None:
+#                        xchng = poloniex()
+#                        handles[exchng] = xchng
+#                    else:
+#                        xchng = handles[exchng]
+#                elif exchng == 'quadrigacx':
+#                    xchng = quadrigacx()
+#                elif exchng == 'qryptos':
+#                    if handles[exchng] == None:
+#                        xchng = qryptos()
+#                        handles[exchng] = xchng
+#                    else:
+#                        xchng = handles[exchng]
+#                elif exchng == 'quoine':
+#                    if handles[exchng] == None:
+#                        xchng = quoine()
+#                        handles[exchng] = xchng
+#                    else:
+#                        xchng = handles[exchng]
+#                elif exchng == 'southxchange':
+#                    xchng = southxchange()
+#                elif exchng == 'surbitcoin':
+#                    xchng = surbitcoin()
+#                elif exchng == 'tidex':
+#                    xchng = tidex()
+#                elif exchng == 'therock':
+#                    if handles[exchng] == None:
+#                        xchng = therock()
+#                        handles[exchng] = xchng
+#                    else:
+#                        xchng = handles[exchng]
+#                elif exchng == 'urdubit':
+#                    xchng = urdubit()
+#                elif exchng == 'vaultoro':
+#                    if handles[exchng] == None:
+#                        xchng = vaultoro()
+#                        handles[exchng] = xchng
+#                    else:
+#                        xchng = handles[exchng]
+#                elif exchng == 'vbtc':
+#                    xchng = vbtc()
+#                elif exchng == 'virwox':
+#                    xchng = virwox()
+#                elif exchng == 'wex':
+#                    xchng = wex()
+#                elif exchng == 'xbtce':
+#                    xchng = xbtce()
+#                elif exchng == 'yobit':
+#                    xchng = yobit()
+#                elif exchng == 'yunbi':
+#                    xchng = yunbi()
+#                elif exchng == 'zaif':
+#                    xchng = zaif()
+#
+#                if exchng == 'coinmarketcap':
+#                    if ticker == 'RELOAD':
+#                        markets = xchng.load_markets(True)
+#                        result = 'Reloaded all tickers for ' + exchng
+#                        logger.info('ccxt: {}'.format(result))
+#                    elif ticker == 'GLOBAL':
+#                        g = xchng.fetch_global()
+#                        if datacode == 'market_cap':
+#                            result = float(g['total_market_cap_usd'])
+#                        elif datacode == 'dominance':
+#                            result = float(g['bitcoin_percentage_of_market_cap'])
+#                        else:
+#                            result = 'Request market_cap or dominance with GLOBAL'
+#                        logger.info('ccxt: {} GLOBAL {} = {}'.format(exchng, datacode, result))
+#                    else:
+#                        markets = xchng.markets
+#                        if markets == None:
+#                            markets = xchng.load_markets()
+#                        if ticker in xchng.symbols:
+#                            result=float(markets[ticker]['info'][datacode])
+#                            logger.info('ccxt: {} {} {} = {}'.format(exchng, ticker, datacode, result))
+#                        else:
+#                            result = 'Unknown ' + exchng + ' pair: ' + ticker
+#                            logger.info('ccxt: {}'.format(result))
+#                    # end of coinmarketcap
+#                elif exchng in caching:
+#                    markets = xchng.markets
+#                    if markets == None:
+#                        markets = xchng.load_markets()
+#                    if ticker == 'RELOAD':
+#                        markets = xchng.load_markets(True)
+#                        result = 'Reloaded all tickers for ' + exchng
+#                        logger.info('ccxt: {}'.format(result))
+#                    elif ticker == 'NOP':
+#                        result = 'Specify RELOAD to refresh cached data' 
+#                        logger.info('ccxt: {}'.format(result))
+#                    elif ticker in xchng.symbols:
+#                        result = float(markets[ticker]['info'][datacode])
+#                        logger.info('ccxt: {} {} {}={:.8f}'.format(exchng, ticker, datacode, result))
+#                    else:
+#                        result = 'Unknown ' + exchng + ' pair: ' + ticker
+#                        logger.info('ccxt: {}'.format(result))
+#                    # end of exchanges with cached results
+#                else:
+#                    # no caching here
+#                    markets = xchng.load_markets()
+#                    if ticker in xchng.symbols: 
+#                        result = xchng.fetch_ticker(ticker)[datacode]
+#                        logger.info('ccxt: {} {} {}={:.8f}'.format(exchng, ticker, datacode, result))
+#                    else:
+#                        result = 'Unknown ' + exchng + ' pair: ' + ticker
+#                        logger.error('ccxt: {}'.format(result))
+#                    # end of uncached exchanges
+#                # end of supported exchanges 
+#            else:
+#                result = 'Unsupported exchange: ' + exchng
+#                logger.error('ccxt: {}'.format(result))
+#        except:
+#            logger.error('ccxt: exception {}'.format(sys.exc_info()[0]))
+#            result = 'Exception encountered'
+#        return result
 
 def createInstance( ctx ):
     return LocImpl( ctx )
