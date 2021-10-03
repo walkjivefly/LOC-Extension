@@ -1,9 +1,15 @@
 LOC-Extension: LibreOffice calc Cryptocurrency market functions
 ===
-The LOC extension allows you to create customized spreadsheets with cryptocurrency market data directly from the web. This version (0.2.3) provides 2 lookup functions: a dedicated getPoloniex() (for compatibility with version 0.1.0) and a generic ccxt() which uses an embedded snapshot of the amazing [ccxt](https://github.com/ccxt/ccxt) library. This means over 90 exchanges are now supported.
+The LOC extension allows you to create customized spreadsheets with cryptocurrency market data directly from the web. This version (0.3.0) provides a number of lookup functions: 
+* a dedicated getPoloniex() (for compatibility with version 0.1.0)
+* a dedicated getSouthXchange() (since SouthExchange was removed from ccxt at version 1.52.67)
+* xrs Blocknet XRouter service caller
+* xcs Blocknet XCloud service caller
+* ccxt() which uses the system-installed [ccxt](https://github.com/ccxt/ccxt) library. This means over 130 exchanges are now supported.
 
+Unlike version 0.2.3, this version does not support caching. 
 ### Download   
-You can download the current version of the LOC Extension here [0.2.3](https://github.com/walkjivefly/LOC-Extension/releases/tag/v0.2.3)
+You can download the current version of the LOC Extension here [0.3.0](https://github.com/walkjivefly/LOC-Extension/releases/tag/v0.3.0)
 
 The LOC extension is also available from the [LibreOffice Extension Center](https://extensions.libreoffice.org/extensions/loc-extension-for-libreoffice-calc).
 
@@ -11,7 +17,7 @@ The LOC extension is also available from the [LibreOffice Extension Center](http
 
 ### Usage
 
-The LOC Extension adds two new functions to Calc. The first is:  
+The LOC Extension adds five new functions to Calc. The first is:  
 ```
 GETPOLONIEX(Ticker,Datacode) 
 ```  
@@ -27,20 +33,44 @@ The second new function is:
 CCXT(Exchange, Ticker, Datacode)
 ```
 
-Exchange is any exchange name supported by the embedded ccxt snapshot (version 1.9.262). Quotes **must** be used according to the same rules as for GETPOLONIEX().
+Exchange is any exchange name supported by the system-installed version of ccxt. Quotes **must** be used according to the same rules as for GETPOLONIEX().
 
 Ticker is a currency pair from the ccxt unified API.
 **NOTE**: The format of the ticker is different from that for GETPOLONIEX(). The valid values depend on the exchange being addressed.
 
 Datacode is one of the ccxt supported data items for the fetch_ticker function. The one you'll probably use most is "last".
 
+The third new function is:  
+```
+GETSOUTHXCHANGE(Ticker,Datacode) 
+```  
+
+Quotes **must** be used when entering the ticker directly ex: ```GETSOUTHXCHANGE("BLOCK/BTC","last")```, but are **not** needed when referencing another cell ex: ```GETSOUTHXCHANGE(A1,A2)```.
+
+In the latter case the data in A1 should be ```BLOCK/BTC```, not ```"BLOCK/BTC"```.
+
+This function is included because I have a requirement for prices from SouthXchange and ccxt deprecated support at version 1.52.67
+
+The fourth new function is:  
+```
+XRS(Service,Parameters) 
+```  
+which calls a Blocknet XRouter service.
+
+Quotes **must** be used when entering the service directly ex: ```XRS("xrGetBlockCount","BLOCK")```, but are **not** needed when referencing another cell ex: ```XRS(A1,A2)```.
+
+The fifth new function is:  
+```
+XCS(Service,Parameters) 
+```  
+which calls a Blocknet XCloud service.
+
+Quotes **must** be used when entering the service directly ex: ```XCS("AlexaRank","blocknetmonitor.com")```, but are **not** needed when referencing another cell ex: ```XCS(A1,A2)```.
+
 ### Performance 
 
-v0.2.3 introduces caching for some of the ccxt supported exchanges. This relies on the ccxt load_markets() function downloading data for every ticker combination supported by the exchange. The cached information is then used for every subsequent lookup for that exchange. If you're pulling the prices for many tickers and you have a slow internet connection this provides a very substantial, very worthwhile, performance improvement after the first fetch. 
+v0.3.0 removes the caching introduced in v0.2.3 in favour of using an external (system-installed) copy of ccxt so as to provide access to more exchanges. For a sheet heavy with extension calls this does negatively impact performance. Users who value performance over the newest, shiniest exchange support may choose to continue with the old version.
 
-The exchanges which provide caching are bitmex, coinmarketcap, gatecoin, lakebtc, livecoin, luno, nova, poloniex, qryptos, quoine, therock and vaultoro.
-
-If you bought coins from, or store coins on (NOT recommnded), multiple exchanges and you have less than stellar internet performance you might want to consider getting price information from a single caching exchange if it carries all your coins. If no one caching exchange carries all of your coins then consider getting data from CoinmarketCap if performance is more important than up to the minute accuracy.
 
 ### Coinmarketcap
 
@@ -48,7 +78,7 @@ Coinmarketcap is supported by ccxt but it is not a regular exchange; it is an ag
 
 ### Windows users
 
-At the present time v[0.2.2](https://github.com/walkjivefly/LOC-Extension/tree/v0.2.2) is the only version recommended for Windows users. This is because some have experienced problems installing v0.2.0. LOC-Extension includes some logging which worked on the test Windows (7) machine I had access to but which is incompatible with (at least some) other machines. I do not currently have access to a Windows (any version) machine for testing.
+At the present time v[0.2.2](https://github.com/walkjivefly/LOC-Extension/tree/v0.2.2) is the only version recommended for Windows users. This is because some have experienced problems installing v0.2.3. LOC-Extension includes some logging which worked on the test Windows (7) machine I had access to but which is incompatible with (at least some) other machines. I do not currently have access to a Windows (any version) machine for testing.
 
 Windows users are **STRONGLY** recommended to make a system snapshot before installing this or any other LibreOffice extension. Then when it goes horribly wrong you'll have a much simpler time recovering.
  
@@ -64,7 +94,8 @@ Recovering from a messed-up extension installation/upgrade is much harder for Wi
 
 ### Dependencies
 
-LOC-Extension is fully standalone. It includes an embedded snapshot of Igor Kroitor's [ccxt](http://github.com/ccxt/ccxt). 
+This version of LOC-Extension has an external dependency on Igor Kroitor's [ccxt](http://github.com/ccxt/ccxt). You can install the latest version by
+```python3 -m module pip install ccxt```
 
 ### Support
 
@@ -99,9 +130,9 @@ There is **NO** warranty of any kind. You use the software entirely at your own 
 
 If you find the extension useful and feel like throwing some coins my way, please use one of these addresses:
 
-BTC: 1Q6rzThika7CW5gi62yx8STAruobS6e7ZW
-ETH: 0x7d7B9554De50823C94815BaEbdB1Aa19c79f0325
-LTC: LYokWz9fyqaAho4tkBabwAWNvUvZGiiMLa
+BTC: 3Gsf5m5WNCutpDg2quGFfLeGr5KJfzTHEh
+ETH: 0xd65d796c242C078a4C1CD853387671e661A9834D
+LTC: MDH8P4XcaZEwrX7PrQVxag4matzHmmjnVa
 
 [GIT:release]: http://github.com/walkjivefly/LOC-Extension/releases/latest
 [License:3.0]: http://www.gnu.org/licenses/lgpl.html
