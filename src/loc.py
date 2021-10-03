@@ -13,6 +13,7 @@
 import unohelper
 from com.loc.crypto.getinfo import LOC
 from urllib.request import urlopen, Request
+#from .api_key_secret_util import get_api_key, get_api_secret
 import json
 import ssl
 import sys
@@ -44,6 +45,19 @@ logger.addHandler(fh)
 #caching = ['bitmex', 'coinmarketcap', 'gatecoin', 'lakebtc', 'livecoin',
 #           'luno', 'nova', 'poloniex', 'qryptos', 'quoine', 'therock',
 #           'vaultoro']
+
+class Birake():
+    def __init__(self):
+        pass
+    def api_query(self, command, ticker):
+        if(command == 'returnTicker'):
+            ret = urlopen(Request('https://api.birake.com/public/ticker/' + ticker))
+            return json.loads(ret.read().decode('utf8'))
+        else:
+            return 'Unknown request'
+    def returnTicker(self, ticker):
+        return self.api_query('returnTicker', ticker)
+
 
 class CryptoBridge():
     def __init__(self):
@@ -112,6 +126,22 @@ class LocImpl(unohelper.Base, LOC):
         return result
 
 
+    def getBirake( self, ticker, datacode='last' ):
+        """Return Birake data. Mapped to PyUNO through the LOC.rdb file"""
+        ticker = ticker.upper()
+        datacode = datacode.lower()
+        if (datacode=='last'):
+            datacode='latest'
+        logger.info('getBirake: ticker={} datacode={}'.format(ticker, datacode))
+        try:
+            merge = Birake()
+            result = float(merge.returnTicker(ticker)[datacode])
+            logger.info('getBirake: result={:.8f}'.format(result))
+        except:
+            result = 'Something bad happened'
+        return result
+
+
     def getCryptoBridge( self, ticker, datacode='last' ):
         """Return CryptoBridge data. Mapped to PyUNO through the LOC.rdb file"""
         ticker = ticker.upper()
@@ -150,6 +180,9 @@ class LocImpl(unohelper.Base, LOC):
             if exchng in ikccxt.exchanges: 
                 xchng = getattr(ikccxt, exchng)
                 actual_exchange = xchng()
+                #if actual_exchange.has['publicAPI'] == false:
+                if exchng == 'bibox':
+                   actual_exchange.has['fetchCurrencies'] = False
                 markets = actual_exchange.load_markets()
                 if ticker in actual_exchange.symbols:
                     result = actual_exchange.fetch_ticker(ticker)[datacode]

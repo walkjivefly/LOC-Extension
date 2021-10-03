@@ -59,6 +59,8 @@ def main(argv):
         loc_test2(main_loc, arg_exchange, arg_ticker, arg_datacode)
     elif arg_funct == 'cb':
         loc_test3(main_loc, arg_ticker, arg_datacode)
+    elif arg_funct == 'merge':
+        loc_test4(main_loc, arg_ticker, arg_datacode)
     else:
         usage(0)
 
@@ -74,6 +76,11 @@ def loc_test2(loc_py, exchange, ticker, datacode):
     
 def loc_test3(loc_py, ticker, datacode):
     result = loc_py.getCryptoBridge(ticker, datacode)
+    print (result)
+    sys.exit()
+    
+def loc_test4(loc_py, ticker, datacode):
+    result = loc_py.getBirake(ticker, datacode)
     print (result)
     sys.exit()
     
