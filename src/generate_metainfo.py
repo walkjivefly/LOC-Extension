@@ -1,6 +1,6 @@
 #  generate_metainfo.py - Generate XML for LOC Extension
 #
-#  Copyright (c) 2017-2019 Mark Brooker (mark@walkjivefly.com)
+#  Copyright (c) 2017-2021 Mark Brooker (mark@walkjivefly.com)
 #
 #  license: GNU LGPL
 #
@@ -112,9 +112,15 @@ loc_xml.write('    <node oor:name="AddInFunctions">\n')
 define_function(loc_xml, \
     'runCommand', 'Runs an arbitrary command.  a = "COMMAND"', \
     [('a', 'The command to be executed.')])
+define_function(loc_xml, \
+    'xrs', 'Runs an XRouter service.  a = "COMMAND", b = "PARAMETERS"', \
+    [('a', 'The command to be executed.'), ('b', 'Optional parameters.')])
+define_function(loc_xml, \
+    'xcs', 'Runs an XCloud service.  a = "COMMAND", b = "PARAMETERS"', \
+    [('a', 'The command to be executed.'), ('b', 'Optional parameters.')])
 
 define_function(loc_xml, \
-    'getCryptoBridge', 'Fetches CryptoBridge Crypto Currency Data.  a = "TICKER", b = "DATACODE"', \
+    'getSouthXchange', 'Fetches SouthXchange Crypto Currency Data.  a = "TICKER", b = "DATACODE"', \
     [('a', 'The ticker symbol.'), ('b', 'The data code.')])
 define_function(loc_xml, \
     'getPoloniex', 'Fetches Poloniex Crypto Currency Data.  a = "TICKER", b = "DATACODE"', \

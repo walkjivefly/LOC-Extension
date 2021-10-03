@@ -5,9 +5,11 @@ module com { module loc { module crypto { module getinfo {
     interface LOC
     {
       any runCommand( [in] string a);
-      any getCryptoBridge( [in] string a, [in] any b );
+      any getSouthXchange( [in] string a, [in] any b );
       any getPoloniex( [in] string a, [in] any b );
       any ccxt( [in] string a, [in] any b, [in] any c );
+      any xrs( [in] string a, [in] any b);
+      any xcs( [in] string a, [in] any b);
     };
 
 }; }; }; };

@@ -1,6 +1,6 @@
 #  loctest.py - Test LOC functions through the Python console
 #
-#  Copyright (c) 2017-2019 Mark Brooker (mark@walkjivefly.com)
+#  Copyright (c) 2017-2021 Mark Brooker (mark@walkjivefly.com)
 #
 #  license: GNU LGPL
 #
@@ -57,10 +57,8 @@ def main(argv):
         loc_test(main_loc, arg_ticker, arg_datacode)
     elif arg_funct == 'ccxt':
         loc_test2(main_loc, arg_exchange, arg_ticker, arg_datacode)
-    elif arg_funct == 'cb':
+    elif arg_funct == 'sx':
         loc_test3(main_loc, arg_ticker, arg_datacode)
-    elif arg_funct == 'merge':
-        loc_test4(main_loc, arg_ticker, arg_datacode)
     else:
         usage(0)
 
@@ -75,17 +73,14 @@ def loc_test2(loc_py, exchange, ticker, datacode):
     sys.exit()
     
 def loc_test3(loc_py, ticker, datacode):
-    result = loc_py.getCryptoBridge(ticker, datacode)
-    print (result)
-    sys.exit()
-    
-def loc_test4(loc_py, ticker, datacode):
-    result = loc_py.getBirake(ticker, datacode)
+    result = loc_py.getSouthXchange(ticker, datacode)
     print (result)
     sys.exit()
     
 def usage(err):
     print ('Usage: loctest.py -f poloniex -t <ticker> -d <datacode>')
+    print ('       -- or --')
+    print ('       loctest.py -f sx -t <ticker> -d <datacode>')
     print ('       -- or --')
     print ('       loctest.py -f ccxt -e <exchange> -t <ticker> -d <datacode>')
     print ('')

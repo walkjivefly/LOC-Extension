@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Import tools for compiling extension binaries
-#export PATH=$PATH:/opt/libreoffice5.3/sdk/bin/
+export PATH=$PATH:/usr/lib/libreoffice/sdk/bin:/usr/lib/libreoffice/program
 
 #Setup directories 
 mkdir -p "${PWD}"/LOC/
