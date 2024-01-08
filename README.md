@@ -103,8 +103,6 @@ There is **NO** warranty of any kind. You use the software entirely at your own 
 
 If you find the extension useful and feel like throwing some coins my way, please use one of these addresses:
 
-* BTC: 3Gsf5m5WNCutpDg2quGFfLeGr5KJfzTHEh 
-* ETH: 0xd65d796c242C078a4C1CD853387671e661A9834D 
 * LTC: MDH8P4XcaZEwrX7PrQVxag4matzHmmjnVa
 
 [GIT:release]: http://github.com/walkjivefly/LOC-Extension/releases/latest
